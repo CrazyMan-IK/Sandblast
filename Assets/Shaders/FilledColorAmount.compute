@@ -1,0 +1,24 @@
+#pragma enable_d3d11_debug_symbols
+#pragma kernel CSMain
+#pragma kernel CSPixels
+
+float4 color;
+Texture2D<float4> baseImage;
+Texture2D<float4> image;
+RWStructuredBuffer<uint> result;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID) {
+    if (all(baseImage[id.xy] == image[id.xy])) {
+        InterlockedAdd(result[0], 1);
+    }
+}
+
+[numthreads(8,8,1)]
+void CSPixels (uint3 id : SV_DispatchThreadID) {
+    float3 c = abs(baseImage[id.xy].rgb - color.rgb);
+
+    if (all(c <= float3(0.001, 0.001, 0.001))) {
+        InterlockedAdd(result[1], 1);
+    }
+}
