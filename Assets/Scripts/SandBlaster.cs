@@ -101,7 +101,6 @@ namespace Sandblast
             _filledColor.SetBaseTexture(_startTex);
             _filledColor.SetTexture(_albedo.RuntimeTexture);
             Shader.SetGlobalColor("_BrushColor", Color.green);
-            Shader.SetGlobalTexture("_ErosionTexture", _erosionTexture);
             Shader.SetGlobalFloat("_BrushSize", 0.125f);
             Shader.SetGlobalFloat("_BrushHardness", 0.75f);
         }
@@ -126,6 +125,11 @@ namespace Sandblast
             _filledColor.SetTargetColor(_targetColor);
             Shader.SetGlobalVectorArray("_CPoints", _points);
             Shader.SetGlobalInt("_PointsCount", _collisionEvents.Count);
+        }
+
+        public override bool IsNeedDisablingRotation()
+        {
+            return false;
         }
 
         public override void Enable()

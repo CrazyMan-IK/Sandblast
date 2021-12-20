@@ -110,8 +110,13 @@ namespace Sandblast
             Shader.SetGlobalVector("_Point", point);
             Shader.SetGlobalColor("_BrushColor", _targetColor);
             Shader.SetGlobalTexture("_ErosionTexture", _erosionTexture);
-            Shader.SetGlobalFloat("_BrushSize", 0.25f);
+            Shader.SetGlobalFloat("_BrushSize", 0.4f);
             Shader.SetGlobalFloat("_BrushHardness", 0.75f);
+        }
+
+        public override bool IsNeedDisablingRotation()
+        {
+            return true;
         }
 
         public override void Enable()

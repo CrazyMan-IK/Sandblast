@@ -9,6 +9,7 @@ namespace Sandblast.UI
     {
         [SerializeField] private List<InstrumentView> _instruments = null;
         [SerializeField] private FilledColor _filled = null;
+        [SerializeField] private OrbitalMovement _movement = null;
 
         private int _currentIndex = -1;
 
@@ -35,32 +36,43 @@ namespace Sandblast.UI
 
         public void Select(int index)
         {
-            if (index >= 0 && index < _instruments.Count)
-            {
-                Select(_instruments[index]);
-            }
-        }
-
-        public void Select(InstrumentView view)
-        {
-            var newIndex = _instruments.FindIndex(x => x == view);
-            if (newIndex < 0 || (_currentIndex > 0 && _currentIndex >= newIndex))
+            if (index < 0 || index >= _instruments.Count || (_currentIndex >= 0 && _currentIndex > index))
             {
                 return;
             }
+
+            var view = _instruments[index];
+            var isEnabled = view.Instrument.enabled && _currentIndex >= 0;
 
             foreach (var instrument in _instruments)
             {
                 instrument.Disable();
             }
 
-            view.Enable();
-            _currentIndex = newIndex;
+            if (!isEnabled)
+            {
+                view.Enable();
+            } 
+            if (view.Instrument.IsNeedDisablingRotation() && !isEnabled)
+            {
+                _movement.enabled = false;
+            }
+            else
+            {
+                _movement.enabled = true;
+            }
+            _currentIndex = index;
+        }
+
+        public void Select(InstrumentView view)
+        {
+            var newIndex = _instruments.FindIndex(x => x == view);
+            Select(newIndex);
         }
 
         private void OnInstrumentClicked(InstrumentView sender)
         {
-            if (_filled.GetProgress() >= 99)
+            if (_filled.IsFilled() || sender == _instruments[_currentIndex])
             {
                 Select(sender);
             }

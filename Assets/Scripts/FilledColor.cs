@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Sandblast
 {
@@ -10,7 +11,7 @@ namespace Sandblast
         [SerializeField] private RenderTexture _baseTexture = null;
         [SerializeField] private RenderTexture _texture = null;
         [SerializeField] private Color _targetColor = Color.white;
-        [SerializeField] private TMPro.TextMeshProUGUI _text = null;
+        [SerializeField] private Image _progress = null;
 
         private ComputeBuffer _buffer = null;
         private readonly uint[] _data = new uint[2] { 0, 0 };
@@ -35,7 +36,7 @@ namespace Sandblast
 
         private void Update()
         {
-            _text.text = GetProgress().ToString("0.##") + "%";
+            _progress.fillAmount = GetProgress();
         }
 
         public void SetBaseTexture(RenderTexture texture)
@@ -58,6 +59,11 @@ namespace Sandblast
             _shader.SetVector("color", _targetColor);
         }
 
+        public bool IsFilled()
+        {
+            return GetProgress() >= 1;
+        }
+
         public float GetProgress()
         {
             if (_baseTexture == null || _texture == null)
@@ -69,13 +75,13 @@ namespace Sandblast
             _data[1] = 0;
             _buffer.SetData(_data);
             _shader.Dispatch(_mainKernelHandle, _texture.width / 8, _texture.height / 8, 1);
-            _shader.Dispatch(_pixelsKernelHandle, _texture.width / 8, _texture.height / 8, 1);
+            //_shader.Dispatch(_pixelsKernelHandle, _texture.width / 8, _texture.height / 8, 1);
             _buffer.GetData(_data);
 
             var percent = 0f;
             if (_data[1] != 0)
             {
-                percent = _data[0] * 1.0f / _data[1] * 100.0f;
+                percent = (_data[0] * 1.0f / _data[1]) * 1.05f;
             }
 
             return percent;

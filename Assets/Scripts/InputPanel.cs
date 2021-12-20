@@ -11,18 +11,7 @@ namespace Sandblast
         public event Action PointerDowned = null;
         public event Action PointerUpped = null;
 
-        //private Vector2 _delta = Vector2.zero;
-
         public Vector2 Delta { get; private set; }
-        /*public Vector2 Delta 
-        { 
-            get
-            {
-                var value = _delta;
-                _delta = Vector2.zero;
-                return value;
-            }
-        }*/
 
         private void LateUpdate()
         {

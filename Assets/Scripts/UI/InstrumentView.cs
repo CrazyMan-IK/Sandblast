@@ -14,6 +14,8 @@ namespace Sandblast.UI
         [SerializeField] private Instrument _instrument = null;
         [SerializeField] private RectTransform _view = null;
 
+        public Instrument Instrument => _instrument;
+
         public void OnPointerClick(PointerEventData eventData)
         {
             Clicked?.Invoke(this);
