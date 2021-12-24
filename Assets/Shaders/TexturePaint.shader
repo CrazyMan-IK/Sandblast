@@ -64,7 +64,7 @@
 					float f = distance(pointt.xyz, worldPos);
 					f = 1.0 - smoothstep(size * soft, size, f);
 
-					col = lerp(col, float4(1, 1, 0.98, 1), f * pointt.w * _BrushColor.g);
+					col = lerp(col, _BrushColor, f * pointt.w);
 					col = saturate(col);
 				}
 

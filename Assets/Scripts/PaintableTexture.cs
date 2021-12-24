@@ -23,12 +23,12 @@ namespace Sandblast
         public RenderTexture RuntimeTexture => _runTimeTexture;
         public RenderTexture PaintedTexture => _paintedTexture;
 
-        public PaintableTexture(Color clearColor, int width, int height, string id, Shader sPaintInUV, Mesh mToDraw, Shader fixIlsandEdgesShader, RenderTexture markedIlsandes) : this(clearColor, width, height, id, sPaintInUV, mToDraw, fixIlsandEdgesShader, markedIlsandes, null, null)
+        public PaintableTexture(Color clearColor, int width, int height, string id, Shader sPaintInUV, Mesh mToDraw, Shader fixIlsandEdgesShader, Texture markedIlsandes) : this(clearColor, width, height, id, sPaintInUV, mToDraw, fixIlsandEdgesShader, markedIlsandes, null, null)
         {
 
         }
 
-        public PaintableTexture(Color clearColor, int width, int height, string id, Shader sPaintInUV, Mesh mToDraw, Shader fixIlsandEdgesShader, RenderTexture markedIlsandes, RenderTexture runTimeTexture, RenderTexture paintedTexture)
+        public PaintableTexture(Color clearColor, int width, int height, string id, Shader sPaintInUV, Mesh mToDraw, Shader fixIlsandEdgesShader, Texture markedIlsandes, RenderTexture runTimeTexture, RenderTexture paintedTexture)
         {
             _id = id;
 

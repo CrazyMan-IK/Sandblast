@@ -17,16 +17,17 @@ namespace Sandblast
         private readonly uint[] _data = new uint[2] { 0, 0 };
 
         private int _mainKernelHandle = -1;
-        private int _pixelsKernelHandle = -1;
+        //private int _prevHashCode = 0;
+        private float _prevProgress = 0;
 
         private void Awake()
         {
             _mainKernelHandle = _shader.FindKernel("CSMain");
-            _pixelsKernelHandle = _shader.FindKernel("CSPixels");
             _buffer = new ComputeBuffer(2, sizeof(uint));
 
             _shader.SetBuffer(_mainKernelHandle, "result", _buffer);
-            _shader.SetBuffer(_pixelsKernelHandle, "result", _buffer);
+
+            StartCoroutine(UpdateProgress());
         }
 
         private void OnDestroy()
@@ -34,27 +35,46 @@ namespace Sandblast
             _buffer.Dispose();
         }
 
-        private void Update()
+        private IEnumerator UpdateProgress()
         {
-            _progress.fillAmount = GetProgress();
+            var wait = new WaitForSeconds(0.1f);
+            while (true)
+            {
+                _progress.fillAmount = GetProgress();
+                yield return wait;
+            }
         }
 
         public void SetBaseTexture(RenderTexture texture)
         {
+            if (_baseTexture == texture)
+            {
+                return;
+            }
+
             _baseTexture = texture;
+
             _shader.SetTexture(_mainKernelHandle, "baseImage", _baseTexture);
-            _shader.SetTexture(_pixelsKernelHandle, "baseImage", _baseTexture);
         }
 
         public void SetTexture(RenderTexture texture)
         {
+            if (_texture == texture)
+            {
+                return;
+            }
+
             _texture = texture;
             _shader.SetTexture(_mainKernelHandle, "image", _texture);
-            //_shader.SetTexture(_pixelsKernelHandle, "image", _texture);
         }
 
         public void SetTargetColor(Color value)
         {
+            if (_targetColor == value)
+            {
+                return;
+            }
+
             _targetColor = value;
             _shader.SetVector("color", _targetColor);
         }
@@ -71,20 +91,59 @@ namespace Sandblast
                 return -1;
             }
 
+            /*var currentHashCode = GetCurrentHashCode();
+            if (_prevHashCode == currentHashCode)
+            {
+                return _prevProgress;
+            }
+
+            _prevHashCode = currentHashCode;*/
+
             _data[0] = 0;
             _data[1] = 0;
             _buffer.SetData(_data);
             _shader.Dispatch(_mainKernelHandle, _texture.width / 8, _texture.height / 8, 1);
-            //_shader.Dispatch(_pixelsKernelHandle, _texture.width / 8, _texture.height / 8, 1);
             _buffer.GetData(_data);
 
-            var percent = 0f;
             if (_data[1] != 0)
             {
-                percent = (_data[0] * 1.0f / _data[1]) * 1.05f;
+                _prevProgress = (_data[0] * 1.0f / _data[1]) * 1.05f;
             }
 
-            return percent;
+            return _prevProgress;
         }
+
+        /*private int GetCurrentHashCode()
+        {
+            unchecked
+            {
+                var h1 = GetTextureHashCode(_baseTexture); //_baseTexture.GetNativeTexturePtr().GetHashCode(); //_baseTexture.imageContentsHash.GetHashCode();
+                var h2 = GetTextureHashCode(_texture); //_texture.GetNativeTexturePtr().GetHashCode(); //_texture.imageContentsHash.GetHashCode();
+                var h3 = _targetColor.GetHashCode();
+
+                return h1 + h2 + h3;
+            }
+        }
+
+        private int GetTextureHashCode(Texture texture)
+        {
+            var ptr = texture.GetNativeTexturePtr();
+
+            *//*var hash = 0;
+            for (int i = 0; i < texture.width * texture.height; i++)
+            {
+                var p = (ptr + i).ToInt32();
+                Hash128.Compute();
+            }*//*
+
+            Hash128 hash;
+            unsafe
+            {
+                var width = (ulong)texture.width;
+                var height = (ulong)texture.height;
+                hash = Hash128.Compute(ptr.ToPointer(), width * height);
+            }
+            return hash.GetHashCode();
+        }*/
     }
 }

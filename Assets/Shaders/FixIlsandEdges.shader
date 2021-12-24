@@ -26,9 +26,9 @@
 				float4 vertex : SV_POSITION;
 			};
 
-					sampler2D	_MainTex;
-			uniform	float4		_MainTex_TexelSize;
-					sampler2D   _IlsandMap;
+			sampler2D _MainTex;
+			uniform	float4 _MainTex_TexelSize;
+			sampler2D _IlsandMap;
 			
 			v2f vert (appdata v)
 			{
@@ -49,11 +49,13 @@
 					int n = 0;
 					average = float3(0.0, 0.0, 0.0);
 
+					//-1.5, -0.5, 0.5, 1.5
+
 					for (float x = -1.5; x <= 1.5; x++) {
 						for (float y = -1.5; y <= 1.5; y++) {
-							float2 xy = float2(x - 1.5, y - 1.5);
-							float3 c =  tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * xy);
-							float  m =  tex2D(_IlsandMap, i.uv + _MainTex_TexelSize.xy * xy);
+							float2 xy = float2(x, y);
+							float3 c = tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * xy);
+							float m = tex2D(_IlsandMap, i.uv + _MainTex_TexelSize.xy * xy);
 
 							n += step(0.1, m);
 							average += c * step(0.1, m);
