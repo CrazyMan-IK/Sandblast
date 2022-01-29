@@ -25,6 +25,8 @@ namespace Sandblast
         private int _currentValue = 0;
         private int _targetValue = 0;
 
+        public int Value => _targetValue;
+
         private void Awake()
         {
             InitCoinsPool();

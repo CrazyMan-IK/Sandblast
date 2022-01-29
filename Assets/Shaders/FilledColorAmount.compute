@@ -1,20 +1,38 @@
 //#pragma enable_d3d11_debug_symbols
 #pragma kernel CSMain
 
+bool useColor;
 float4 color;
 Texture2D<float4> baseImage;
 Texture2D<float4> image;
+Texture2D<float4> mask;
 RWStructuredBuffer<uint> result;
+
+//const static float3 eps3 = { 0.005, 0.005, 0.005 };
+//const static float4 eps4 = 0.005;
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID) {
-    float3 c = abs(baseImage[id.xy].rgb - color.rgb);
+    if (mask[id.xy].a == 0.0) {
+        return;
+    }
 
-    if (all(baseImage[id.xy] == image[id.xy])) {
+    float4 c2 = abs(baseImage[id.xy] - image[id.xy]);
+
+    if (all(c2 <= 0.005)) {
         InterlockedAdd(result[0], 1);
     }
 
-    if (all(c <= float3(0.005, 0.005, 0.005))) {
+    if (useColor)
+    {
+        float3 c1 = abs(baseImage[id.xy].rgb - color.rgb);
+
+        if (all(c1 <= 0.005)) {
+            InterlockedAdd(result[1], 1);
+        }
+    }
+    else
+    {
         InterlockedAdd(result[1], 1);
     }
 }

@@ -11,6 +11,7 @@ namespace Sandblast
         public event Action PointerDowned = null;
         public event Action PointerUpped = null;
 
+        public bool IsTouching { get; private set; }
         public Vector2 Delta { get; private set; }
 
         private void LateUpdate()
@@ -20,6 +21,7 @@ namespace Sandblast
 
         public void OnBeginDrag(PointerEventData eventData)
         {
+            IsTouching = true;
             PointerDowned?.Invoke();
         }
 
@@ -30,6 +32,7 @@ namespace Sandblast
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            IsTouching = false;
             PointerUpped?.Invoke();
         }
 

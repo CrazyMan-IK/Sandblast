@@ -9,7 +9,6 @@ namespace Sandblast
     [DefaultExecutionOrder(-2)]
     public class MarkingIslandsTexture : MonoBehaviour
     {
-        [SerializeField] private Texture2D _baseTexture = null;
         [SerializeField] private MeshFilter _target = null;
         [SerializeField] private Shader _islandMarker = null;
 
@@ -18,9 +17,9 @@ namespace Sandblast
 
         public Texture Result => _result;
 
-        public void Init()
+        public void Init(Texture texture)
         {
-            _result = new RenderTexture(_baseTexture.width, _baseTexture.height, 0, RenderTextureFormat.R8);
+            _result = new RenderTexture(texture.width, texture.height, 0, RenderTextureFormat.R8);
 
             _buffer = new CommandBuffer();
             _buffer.name = "markingIlsnads";

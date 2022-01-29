@@ -1,5 +1,12 @@
 ﻿Shader "Unlit/SetupTexture"
 {
+	Properties
+	{
+		_MainTex("", 2D) = "white" {}
+		_SecondTex("", 2D) = "white" {}
+		_UVMask("", 2D) = "white" {}
+	}
+
 	SubShader
 	{
 		Tags{ "RenderType" = "Opaque" }
@@ -29,6 +36,9 @@
 			};
 
 			sampler2D _MainTex;
+			sampler2D _SecondTex;
+			sampler2D _UVMask;
+			float4 _Color;
 
 			v2f vert(appdata v)
 			{
@@ -46,10 +56,15 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				float4 col = tex2D(_MainTex, i.uv);
-				return col;
+				float4 startCol = tex2D(_MainTex, i.uv);
+				float4 endCol = tex2D(_SecondTex, i.uv);
+				float maskCol = tex2D(_UVMask, i.uv).a;
 
-				return float4(0.0, 0.0, 1.0, 1.0);
+				float4 col = lerp(startCol, endCol, _Color);
+
+				//return lerp(startCol, col, _IsInvertedMask ? 1 - maskCol : maskCol);
+				return lerp(startCol, col, maskCol);
+				//return lerp(col, startCol, maskCol);
 			}
 			ENDCG
 		}

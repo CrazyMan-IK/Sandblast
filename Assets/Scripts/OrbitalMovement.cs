@@ -11,7 +11,7 @@ namespace Sandblast
 
         private void Update()
         {
-            var velocity = _input.Delta * _sensitivityScale * Time.deltaTime;
+            var velocity = _input.Delta * _sensitivityScale;// * Time.deltaTime;
 
             transform.rotation = Quaternion.AngleAxis(velocity.x, Vector3.down) * Quaternion.AngleAxis(velocity.y, Vector3.right) * transform.rotation;
         }

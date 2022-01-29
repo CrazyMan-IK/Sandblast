@@ -43,6 +43,7 @@ namespace Sandblast
         {
             yield return _wallet.Add(transform, _count);
 
+            Amplitude.Instance.setUserProperty("current_soft", _wallet.Value);
             _level.LoadNextLevel();
         }
     }

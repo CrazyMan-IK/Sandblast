@@ -1,113 +1,168 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using DG.Tweening;
 
 namespace Sandblast.UI
 {
     [DefaultExecutionOrder(1)]
     public class InstrumentSelector : MonoBehaviour
     {
+        public event Action<int> InstrumentChanged = null;
         public event Action FullCompleted = null;
 
-        [SerializeField] private List<InstrumentView> _instruments = null;
-        [SerializeField] private FilledColor _filled = null;
+        [SerializeField] private Sprite _fullCompletedSprite = null;
+        [SerializeField] private ProgressBar _progress = null;
         [SerializeField] private OrbitalMovement _movement = null;
+        [SerializeField] private Image _currentInstrumentIcon = null;
+        [SerializeField] private Image _nextInstrumentIcon = null;
+        [SerializeField] private Image _animationOverlay = null;
+        [SerializeField] private Image _animationIcon = null;
+        [SerializeField] private Button _toggle = null;
 
-        private int _availableInstrumentsCount = 0;
+        private List<Instrument> _instruments = null;
 
         private int _currentIndex = -1;
         private int _completedCount = 0;
+        private bool _subscribed = false;
+        //private Vector3 _startTogglePosition = Vector3.zero;
 
         private void Start()
         {
             CommonInit();
+
+            //_startTogglePosition = _toggle.transform.position;
+        }
+
+        private void Update()
+        {
+            if (_currentIndex < 0)
+            {
+                return;
+            }
+
+            if (_toggle.transform is RectTransform rectTransform)
+            {
+                var instrument = _instruments[_currentIndex];
+
+                if (instrument.IsAlwaysActive())
+                {
+                    rectTransform.localScale = Vector3.zero;
+                    return;
+                }
+
+                rectTransform.localScale = Vector3.one;
+
+                rectTransform.position = Vector3.Scale(Camera.main.WorldToScreenPoint(instrument.transform.position), Vector3.right + Vector3.up);
+                rectTransform.anchoredPosition += instrument.Offset.position;
+                rectTransform.sizeDelta = instrument.Offset.size;
+            }
         }
 
         private IEnumerator AsyncStart()
         {
             yield return new WaitForEndOfFrame();
 
-            Select(0);
-            _instruments[0].StartHighlight();
+            //Select(0);
         }
 
         private void OnEnable()
         {
+            if (_instruments == null || _subscribed)
+            {
+                return;
+            }
+
             foreach (var instrument in _instruments)
             {
-                instrument.Instrument.Completed += OnInstrumentCompleted;
-                instrument.Clicked += OnInstrumentClicked;
+                instrument.Completed += OnInstrumentCompleted;
             }
+            _toggle.onClick.AddListener(OnInstrumentToggle);
+
+            _subscribed = true;
         }
 
         private void OnDisable()
         {
             foreach (var instrument in _instruments)
             {
-                instrument.Instrument.Completed -= OnInstrumentCompleted;
-                instrument.Clicked -= OnInstrumentClicked;
+                instrument.Completed -= OnInstrumentCompleted;
             }
+            _toggle.onClick.RemoveListener(OnInstrumentToggle);
+
+            _subscribed = false;
         }
 
-        public void Init(int availableInstrumentsCount)
+        public void Init(IEnumerable<Instrument> instruments)
         {
-            if (availableInstrumentsCount < 1 || availableInstrumentsCount > _instruments.Count)
+            if (instruments == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(availableInstrumentsCount));
+                throw new ArgumentNullException(nameof(instruments));
+            }
+            if (instruments.Count() < 1)
+            {
+                throw new ArgumentOutOfRangeException(nameof(instruments));
             }
 
-            for (int i = availableInstrumentsCount; i < _instruments.Count; i++)
-            {
-                _instruments[i].gameObject.SetActive(false);
-            }
+            _instruments = instruments.ToList();
 
-            _availableInstrumentsCount = availableInstrumentsCount;
+            _progress.Init(_instruments);
+
+            OnEnable();
 
             CommonInit();
         }
 
         public void Select(int index)
         {
-            if (index < 0 || index >= _availableInstrumentsCount || (_currentIndex >= 0 && _currentIndex > index))
+            if (index < 0 || index >= _instruments.Count || (_currentIndex >= 0 && _currentIndex > index))
             {
                 return;
             }
 
-            var view = _instruments[index];
-            var isEnabled = view.Instrument.enabled && _currentIndex >= 0;
+            var instrument = _instruments[index];
+            //var isEnabled = instrument.gameObject.activeSelf && _currentIndex >= 0;
 
-            for (int i = 0; i < _availableInstrumentsCount; i++)
+            for (int i = 0; i < _instruments.Count; i++)
             {
-                _instruments[i].Disable();
+                _instruments[i].Hide();
+                if (i != index)
+                {
+                    _instruments[i].Disable();
+                }
             }
 
-            if (!isEnabled)
+            //_toggle.transform.DOLocalMoveY(isEnabled ? 0 : 100, 0.2f);
+            /*if (!isEnabled)
+            {*/
+            instrument.Show();
+            if (instrument.IsAlwaysActive())
             {
-                view.StopHighlight();
-                view.Enable();
-            } 
-            if (view.Instrument.IsNeedDisablingRotation() && !isEnabled)
-            {
-                _movement.enabled = false;
+                instrument.Enable();
             }
-            else
-            {
-                _movement.enabled = true;
-            }
+            
+            _movement.enabled = !(instrument.IsNeedDisablingRotation() && instrument.enabled);
+            //}
             _currentIndex = index;
-        }
-
-        public void Select(InstrumentView view)
-        {
-            var newIndex = _instruments.FindIndex(x => x == view);
-            Select(newIndex);
         }
 
         private void CommonInit()
         {
-            if (_currentIndex == -1 && _availableInstrumentsCount != 0)
+            if (_currentIndex == -1 && _instruments != null)
             {
+                _currentInstrumentIcon.sprite = _instruments[0].Preview;
+                if (_instruments.Count > 1)
+                {
+                    _nextInstrumentIcon.sprite = _instruments[1].Preview;
+                }
+                else
+                {
+                    _nextInstrumentIcon.sprite = _fullCompletedSprite;
+                }
+
                 Select(0);
 
                 StartCoroutine(AsyncStart());
@@ -116,24 +171,94 @@ namespace Sandblast.UI
 
         private void OnInstrumentCompleted()
         {
+            _instruments[_completedCount].Disable();
+
             _completedCount++;
 
-            if (_completedCount >= _availableInstrumentsCount)
+            if (_completedCount >= _instruments.Count)
             {
-                _instruments[_availableInstrumentsCount - 1].Disable();
+                _instruments[_completedCount - 1].transform.DOLocalMove(Vector3.down * 5, 0.6f).SetRelative();
                 FullCompleted?.Invoke();
                 return;
             }
 
-            _instruments[_completedCount].StartHighlight();
+            InstrumentChanged?.Invoke(_completedCount);
+
+            _progress.SetCurrentInstrument(_completedCount);
+
+            if (_completedCount + 1 < _instruments.Count)
+            {
+                _nextInstrumentIcon.sprite = _instruments[_completedCount + 1].Preview;
+            }
+            else
+            {
+                _nextInstrumentIcon.sprite = _fullCompletedSprite;
+            }
+
+            RunIconAnimation(0.6f);
         }
 
-        private void OnInstrumentClicked(InstrumentView sender)
+        private void OnInstrumentToggle()
         {
-            if (_filled.IsFilled() || sender == _instruments[_currentIndex])
+            var instrument = _instruments[_completedCount];
+
+            if (instrument.IsAlwaysActive())
             {
-                Select(sender);
+                return;
             }
+
+            if (instrument.enabled)
+            {
+                instrument.Disable();
+            }
+            else
+            {
+                instrument.Enable();
+            }
+
+            _movement.enabled = !(instrument.IsNeedDisablingRotation() && instrument.enabled);
+
+            //Select(_completedCount);
+        }
+
+        private void RunIconAnimation(float delay)
+        {
+            var animation = DOTween.Sequence().OnComplete(() =>
+            {
+                _nextInstrumentIcon.gameObject.SetActive(true);
+                _animationOverlay.gameObject.SetActive(false);
+                //Select(_completedCount);
+                _currentInstrumentIcon.sprite = _instruments[_completedCount].Preview;
+            });
+
+            _animationIcon.sprite = _currentInstrumentIcon.sprite;
+            _animationOverlay.gameObject.SetActive(true);
+            _nextInstrumentIcon.gameObject.SetActive(false);
+            _animationIcon.rectTransform.position = _nextInstrumentIcon.rectTransform.position;
+
+            animation.Append(_animationIcon.rectTransform.DOAnchorPos(Vector2.zero, delay).SetEase(Ease.InOutQuart));
+            animation.Join(_animationIcon.rectTransform.DOScale(3, delay));
+            animation.Join(_animationOverlay.DOFade(0.5f, delay));
+            animation.Join(_instruments[_completedCount - 1].transform.DOLocalMove(Vector3.down * 5, delay).SetRelative());
+
+            animation.Append(_animationIcon.rectTransform.DORotate(Vector3.up * 180, delay / 2, RotateMode.LocalAxisAdd).SetEase(Ease.InCubic).OnComplete(() =>
+            {
+                //_animationIcon.rectTransform.eulerAngles = Vector3.down * 90;
+                _animationIcon.sprite = _nextInstrumentIcon.sprite;
+                _instruments[_completedCount].transform.position += Vector3.down * 5;
+                Select(_completedCount);
+            }));
+            animation.Append(_animationIcon.rectTransform.DORotate(Vector3.up * 180, delay / 2, RotateMode.LocalAxisAdd).SetEase(Ease.OutCubic));
+
+            animation.Append(_animationIcon.rectTransform.DOMove(_nextInstrumentIcon.rectTransform.position, delay).SetEase(Ease.InOutQuart));
+            animation.Join(_animationIcon.rectTransform.DOScale(1, delay));
+            animation.Join(_animationOverlay.DOFade(0, delay));
+            animation.Join(_instruments[_completedCount].transform.DOLocalMove(Vector3.up * 5, delay).SetRelative());
+
+            /*animation.OnComplete(() =>
+            {
+                InstrumentChanged?.Invoke(_completedCount);
+            });*/
         }
     }
 }

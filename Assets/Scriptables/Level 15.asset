@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7add1e66b08c8d841ac5b0323d3ea3a3, type: 3}
+  m_Name: Level 15
+  m_EditorClassIdentifier: 
+  _mesh: {fileID: 4300000, guid: f643039ba3e50ba46873c73d521b0473, type: 3}
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 50, y: 50, z: 50}
+  _targetColor: {r: 1, g: 1, b: 0.015686274, a: 1}
+  _instruments:
+  - {fileID: 1674946523628901456, guid: ab5dc8991bb40934e916f265f76f06a5, type: 3}
+  - {fileID: 1925275808418412983, guid: cb9dc89371e6bfd4fb954d700798e2e1, type: 3}
+  - {fileID: 8236208002393598815, guid: 291eac01ec2b52241b637f0989559668, type: 3}

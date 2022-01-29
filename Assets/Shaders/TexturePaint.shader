@@ -1,5 +1,10 @@
 ﻿Shader "Unlit/TexturePaint"
 {
+	Properties
+	{
+		_UVMask("", 2D) = "white" {}
+	}
+
 	SubShader
 	{
 		Tags { "RenderType"="Opaque" }
@@ -33,6 +38,7 @@
 			int _PointsCount;
 			float4x4 mesh_Object2World;
 			sampler2D _MainTex;
+			sampler2D _UVMask;
 			float4 _BrushColor;
 			float _BrushHardness;
 			float _BrushSize;
@@ -54,7 +60,9 @@
 			
 			fixed4 frag(v2f i) : SV_Target
 			{
-				float4 col = tex2D(_MainTex, i.uv);
+				float4 startCol = tex2D(_MainTex, i.uv);
+				float maskCol = tex2D(_UVMask, i.uv).a;
+				float4 col = startCol;
 				float size = _BrushSize;
 				float soft = _BrushHardness;
 				float3 worldPos = i.worldPos;
@@ -68,7 +76,7 @@
 					col = saturate(col);
 				}
 
-				return col;
+				return lerp(startCol, col, maskCol);
 			}
 			ENDCG
 		}

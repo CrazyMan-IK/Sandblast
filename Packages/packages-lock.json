@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.amplitude.unityplugin": {
+      "version": "https://github.com/amplitude/unity-plugin.git?path=/Assets",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "5b2890fa9a0b129a23c608c4bbdd2aaa81d76f0e"
+    },
     "com.coffee.softmask-for-ugui": {
       "version": "https://github.com/mob-sakai/SoftMaskForUGUI.git",
       "depth": 0,
@@ -40,7 +47,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.visualstudio": {
-      "version": "2.0.12",
+      "version": "2.0.14",
       "depth": 0,
       "source": "registry",
       "dependencies": {

@@ -1,5 +1,10 @@
 ﻿Shader "Unlit/FixIlsandEdges"
 {
+	Properties
+	{
+		_MainTex("", 2D) = "white" {}
+		_IlsandMap("", 2D) = "white" {}
+	}
 	
 	SubShader
 	{
@@ -50,9 +55,10 @@
 					average = float3(0.0, 0.0, 0.0);
 
 					//-1.5, -0.5, 0.5, 1.5
+					const float threshold = 3.0;
 
-					for (float x = -1.5; x <= 1.5; x++) {
-						for (float y = -1.5; y <= 1.5; y++) {
+					for (float x = -threshold; x <= threshold; x++) {
+						for (float y = -threshold; y <= threshold; y++) {
 							float2 xy = float2(x, y);
 							float3 c = tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * xy);
 							float m = tex2D(_IlsandMap, i.uv + _MainTex_TexelSize.xy * xy);

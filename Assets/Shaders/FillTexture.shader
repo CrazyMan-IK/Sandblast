@@ -1,5 +1,11 @@
 ﻿Shader "Unlit/FillTexture"
 {
+	Properties
+	{
+		_MainTex("", 2D) = "white" {}
+		_UVMask("", 2D) = "white" {}
+	}
+
 	SubShader
 	{
 		Tags{ "RenderType" = "Opaque" }
@@ -28,6 +34,8 @@
 				float2 uv : TEXCOORD0;
 			};
 
+			sampler2D _MainTex;
+			sampler2D _UVMask;
 			float4 _Color;
 
 			v2f vert(appdata v)
@@ -46,7 +54,10 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-				return _Color;
+				float4 startCol = tex2D(_MainTex, i.uv);
+				float maskCol = tex2D(_UVMask, i.uv).a;
+
+				return lerp(startCol, _Color, maskCol);
 			}
 			ENDCG
 		}

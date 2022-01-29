@@ -1,24 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 using UnityEngine.Rendering;
+using UnityEngine.EventSystems;
 
 namespace Sandblast
 {
-    public class Polish : Instrument
+    public class Polish : Instrument, IDragHandler, IInitializePotentialDragHandler
     {
-        [SerializeField] private Texture _baseTexture;
         [SerializeField] private Material _meshMaterial;
-        [SerializeField] private MeshFilter _target;
         [SerializeField] private Shader _uvShader;
+        [SerializeField] private Shader _setupShader;
         [SerializeField] private Shader _fillShader;
+        [SerializeField] private Shader _fillColorShader;
         [SerializeField] private Shader _fixIlsandEdgesShader;
-        [SerializeField] private FilledColor _filledColor;
 
         private Camera _camera;
-        private ParticleSystem _particleSystem;
-        private readonly List<ParticleCollisionEvent> _collisionEvents = new List<ParticleCollisionEvent>();
-        private readonly Vector4[] _points = new Vector4[128];
 
         private RenderTexture _startTex;
         private CommandBuffer _startTexBuffer;
@@ -26,10 +24,8 @@ namespace Sandblast
         private PaintableTexture _albedo;
         private bool _inited = false;
 
-        private void Awake()
-        {
-            _particleSystem = GetComponent<ParticleSystem>();
-        }
+        private Ray _ray = new Ray();
+        private readonly RaycastHit[] _hits = new RaycastHit[1];
 
         private void Update()
         {
@@ -38,68 +34,59 @@ namespace Sandblast
                 return;
             }
 
-            _albedo.UpdateShaderParameters(_target.transform.localToWorldMatrix);
+            _albedo.UpdateShaderParameters(Target.transform.localToWorldMatrix, UVMask);
 
-            _filledColor.SetBaseTexture(_startTex);
-            _filledColor.SetTexture(_albedo.RuntimeTexture);
-            _filledColor.SetTargetColor(Color.white);
+            FilledColor.SetBaseTexture(_startTex);
+            FilledColor.SetTexture(_albedo.RuntimeTexture);
+            FilledColor.SetTargetColor(Color.white);
+            FilledColor.SetUVMask(UVMask);
+            if (UVMask != null)
+            {
+                FilledColor.SetUVMask(UVMask);
+            }
+            else
+            {
+                FilledColor.SetUVMask(_startTex);
+            }
+
             Shader.SetGlobalColor("_BrushColor", Color.white);
             Shader.SetGlobalFloat("_BrushSize", 0.175f);
             Shader.SetGlobalFloat("_BrushHardness", 0.75f);
 
-            if (Input.GetMouseButtonUp(0) && _filledColor.IsFilled() && !IsCompleted)
+            if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {
+                StartCoroutine(_albedo.BlitWithTexture(_startTex, _setupShader, Color.white, UVMask, true));
                 InvokeCompletedEvent();
             }
         }
 
-        private void OnParticleCollision(GameObject other)
+        public void OnDrag(PointerEventData eventData)
         {
-            if (_particleSystem == null)
+            const float rotationThreshold = 1.25f;
+
+            var coord = _camera.ScreenToWorldPoint((Vector3)eventData.position + Vector3.forward * 1.45f);
+            transform.position = Vector3.Slerp(transform.position, coord, 20 * Time.deltaTime);
+
+            _ray.origin = transform.position;
+            _ray.direction = Quaternion.Euler(Random.Range(-rotationThreshold, rotationThreshold) * 2, Random.Range(-rotationThreshold, rotationThreshold), 0) * (coord - _camera.transform.position);
+            var point = Vector4.one * 999;
+
+            if (Physics.RaycastNonAlloc(_ray, _hits) > 0)
             {
-                return;
+                if (_hits[0].collider.gameObject == Target.gameObject)
+                {
+                    point = _hits[0].point;
+                }
             }
 
-            _particleSystem.GetCollisionEvents(other, _collisionEvents);
+            point.w = 1;
 
-            for (int i = 0; i < _collisionEvents.Count && i < _points.Length; i++)
-            {
-                var contactPoint = _collisionEvents[i].intersection;
-                _points[i] = new Vector4(contactPoint.x, contactPoint.y, contactPoint.z, 1);
-            }
-
-            _filledColor.SetBaseTexture(_startTex);
-            _filledColor.SetTexture(_albedo.RuntimeTexture);
-            _filledColor.SetTargetColor(Color.white);
-            Shader.SetGlobalVectorArray("_CPoints", _points);
-            Shader.SetGlobalInt("_PointsCount", _collisionEvents.Count);
+            Shader.SetGlobalVector("_Point", point);
         }
 
-        public void Init(Color targetColor)
+        public void OnInitializePotentialDrag(PointerEventData eventData)
         {
-            if (_particleSystem == null)
-            {
-                _particleSystem = GetComponent<ParticleSystem>();
-            }
-
-            var main = _particleSystem.main;
-            main.startColor = targetColor;
-
-            _camera = Camera.main;
-            _albedo = new PaintableTexture(new Color(1, 1, 1, 0), _baseTexture.width, _baseTexture.height, "_SpecGlossMap", _uvShader, _target.mesh, _fixIlsandEdgesShader, MarkedIslands);
-
-            _startTex = new RenderTexture(_albedo.RuntimeTexture.descriptor);
-
-            //_filledColor.SetBaseTexture(_startTex);
-            //_filledColor.SetTexture(_albedo.RuntimeTexture);
-            //_filledColor.SetTargetColor(Color.white);
-
-            _meshMaterial.SetTexture(_albedo.Id, _albedo.RuntimeTexture);
-
-            _albedo.SetActiveTexture(_camera);
-            SetupDestinationTextureBuffer();
-
-            _inited = true;
+            eventData.useDragThreshold = false;
         }
 
         public override bool IsNeedDisablingRotation()
@@ -107,56 +94,92 @@ namespace Sandblast
             return false;
         }
 
-        public override void Enable()
+        public override bool IsAlwaysActive()
         {
-            if (_particleSystem == null)
-            {
-                _particleSystem = GetComponent<ParticleSystem>();
-            }
-
-            enabled = true;
-            _albedo.SetActiveTexture(_camera);
-
-            var emission = _particleSystem.emission;
-            emission.enabled = true;
+            return true;
         }
 
-        public override void Disable()
+        protected override void AfterEnable()
         {
-            if (_particleSystem == null)
-            {
-                _particleSystem = GetComponent<ParticleSystem>();
-            }
+            _albedo.SetActiveTexture(_camera);
+        }
 
-            enabled = false;
+        protected override void AfterDisable()
+        {
             _albedo.SetInactiveTexture(_camera);
 
-            var emission = _particleSystem.emission;
-            emission.enabled = false;
-
-            Shader.SetGlobalInt("_PointsCount", 0);
+            Shader.SetGlobalVector("_Point", Vector4.one * 999);
         }
 
-        private void SetupDestinationTextureBuffer()
+        protected override IEnumerator AfterInit()
+        {
+            _camera = Camera.main;
+            _albedo = new PaintableTexture(Color.white - Color.black, BaseTexture.width, BaseTexture.height, Constants.Specular, _uvShader, Target.mesh, _fixIlsandEdgesShader, MarkedIslands);
+
+            var hasntTexture = PaintablesHolder.TryAddTexture(Constants.Specular, _albedo);
+            if (!hasntTexture)
+            {
+                _albedo = PaintablesHolder.GetTexture(Constants.Specular);
+            }
+
+            //_filledColor.SetBaseTexture(_startTex);
+            //_filledColor.SetTexture(_albedo.RuntimeTexture);
+            //_filledColor.SetTargetColor(Color.white);
+            _meshMaterial.SetTexture(_albedo.Id, _albedo.RuntimeTexture);
+
+            _albedo.SetActiveTexture(_camera);
+            if (hasntTexture)
+            {
+                _albedo.BlitWithTexture(BaseTexture, _setupShader, Color.white - Color.black, null);
+            }
+
+            _inited = true;
+
+            yield return null;
+            _startTex = new RenderTexture(_albedo.RuntimeTexture.descriptor);
+            _startTex.name = $"StartTex {GetType().Name}";
+            FillWithColor(_startTex, _fillShader);
+            yield return SetupDestinationTextureBuffer();
+            FillWithColor(_albedo.PaintedTexture, _fillColorShader);
+
+            Shader.SetGlobalVector("_Point", Vector4.one * 999);
+        }
+
+        public void FillWithColor(RenderTexture source, Shader shader)
+        {
+            var mat = new Material(shader);
+            mat.color = Color.white - Color.white;
+
+            Graphics.Blit(source, source, mat);
+        }
+
+        private IEnumerator SetupDestinationTextureBuffer()
         {
             _startTexBuffer = new CommandBuffer();
             _startTexBuffer.name = "startTex";
             _startTexBuffer.SetRenderTarget(_startTex);
 
-            var fill = new Material(_fillShader);
+            var fill = new Material(_fillColorShader);
+            if (UVMask != null)
+            {
+                fill.SetTexture("_UVMask", UVMask);
+            }
             if (!fill.SetPass(0))
             {
                 Debug.LogError("Invalid Shader Pass: ");
             }
 
-            Graphics.SetRenderTarget(_startTex);
-            fill.color = new Color(0, 0, 0, 1);
-            Graphics.Blit(_startTex, _startTex, fill);
-
             fill.color = Color.white;
-            _startTexBuffer.DrawMesh(_target.mesh, Matrix4x4.identity, fill);
+            _startTexBuffer.DrawMesh(Target.mesh, Matrix4x4.identity, fill);
 
             _camera.AddCommandBuffer(CameraEvent.AfterDepthTexture, _startTexBuffer);
+
+            for (int i = 0; i < 5; i++)
+            {
+                yield return null;
+            }
+
+            _camera.RemoveCommandBuffer(CameraEvent.AfterDepthTexture, _startTexBuffer);
         }
     }
 }

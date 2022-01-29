@@ -39,12 +39,17 @@ namespace Sandblast
                 filterMode = FilterMode.Bilinear
             };
 
+            _runTimeTexture.name = $"Runtime{id}";
+
             _paintedTexture = paintedTexture ?? new RenderTexture(width, height, 0)
             {
                 anisoLevel = 0,
                 useMipMap = false,
                 filterMode = FilterMode.Bilinear
             };
+
+            _paintedTexture.name = $"Painted{id}";
+            
             _fixedIlsands = new RenderTexture(_paintedTexture.descriptor);
 
             Graphics.SetRenderTarget(_runTimeTexture);
@@ -72,13 +77,49 @@ namespace Sandblast
             _buffer.Blit(_runTimeTexture, _paintedTexture);
         }
 
-        public void BlitWithTexture(Texture tex, Shader shader)
+        public void BlitWithTexture(Texture tex, Shader shader, Color color, Texture uvMask)
         {
-            var mat = new Material(shader);
-            mat.mainTexture = tex;
+            BlitWithTexture(tex, shader, color, uvMask, false).MoveNext();
+        }
 
-            Graphics.Blit(tex, _paintedTexture, mat);
-            //_buffer.Blit(tex, _paintedTexture, mat);
+        public void ReplacePaintShader(Shader newShader)
+        {
+            _paintInUV.shader = newShader;
+            _paintInUV.SetTexture("_MainTex", _paintedTexture);
+        }
+
+        public IEnumerator BlitWithTexture(Texture tex, Shader shader, Color color, Texture uvMask, bool fixIlsands = false)
+        {
+            var temp1 = RenderTexture.GetTemporary(_runTimeTexture.descriptor);
+            var temp2 = RenderTexture.GetTemporary(_paintedTexture.descriptor);
+
+            var mat = new Material(shader);
+            mat.SetTexture("_SecondTex", tex);
+            mat.SetTexture("_UVMask", uvMask);
+            mat.color = color; //Color.white; // - Color.black;
+
+            //UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.focusedWindow);
+            Graphics.Blit(_runTimeTexture, temp1, mat);
+            Graphics.Blit(temp1, _runTimeTexture, mat);
+
+            Graphics.Blit(_paintedTexture, temp2, mat);
+            Graphics.Blit(temp2, _paintedTexture, mat);
+            //UnityEditorInternal.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.focusedWindow);
+
+            RenderTexture.ReleaseTemporary(temp1);
+            RenderTexture.ReleaseTemporary(temp2);
+
+            if (fixIlsands)
+            {
+                for (int i = 0; i < 5; i++)
+                {
+                    Graphics.Blit(_runTimeTexture, _fixedIlsands, _fixedEdges);
+                    Graphics.Blit(_fixedIlsands, _runTimeTexture);
+                    Graphics.Blit(_runTimeTexture, _paintedTexture);
+
+                    yield return null;
+                }
+            }
         }
 
         public void SetActiveTexture(Camera camera)
@@ -91,9 +132,10 @@ namespace Sandblast
             camera.RemoveCommandBuffer(CameraEvent.AfterDepthTexture, _buffer);
         }
 
-        public void UpdateShaderParameters(Matrix4x4 localToWorld)
+        public void UpdateShaderParameters(Matrix4x4 localToWorld, Texture mask)
         {
             _paintInUV.SetMatrix("mesh_Object2World", localToWorld);
+            _paintInUV.SetTexture("_UVMask", mask);
         }
     }
 }
