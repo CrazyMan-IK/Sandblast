@@ -12,11 +12,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7add1e66b08c8d841ac5b0323d3ea3a3, type: 3}
   m_Name: Level 10
   m_EditorClassIdentifier: 
-  _mesh: {fileID: 3928801240859105319, guid: 73108e770c1f0094ab24124d14dba65c, type: 3}
-  _offset: {x: -0.5, y: 0, z: 0}
-  _scale: {x: 5, y: 5, z: 5}
-  _targetColor: {r: 0.7490196, g: 0.7490196, b: 0.7490196, a: 1}
+  _baseTexture: {fileID: 2800000, guid: 23e2999adf2ac2e4aba484e1b69f19fa, type: 3}
+  _mesh: {fileID: -5963816905347386165, guid: b670e6843d2ab2740aa570e8efbc4ab7, type: 3}
+  _offset: {x: 0, y: 0, z: 0}
+  _scale: {x: 1, y: 1, z: 1}
+  _rotation: {x: 90, y: 180, z: 0}
   _instruments:
-  - {fileID: 1674946523628901456, guid: ab5dc8991bb40934e916f265f76f06a5, type: 3}
-  - {fileID: 1925275808418412983, guid: cb9dc89371e6bfd4fb954d700798e2e1, type: 3}
-  - {fileID: 8236208002393598815, guid: 291eac01ec2b52241b637f0989559668, type: 3}
+  - _maxFill: 0.85
+    _instrument: {fileID: 1674946523628901456, guid: a1be854fb05385149af5fb1cd4f1b059, type: 3}
+    _targetColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    _uvMask: {fileID: 0}
+  - _maxFill: 1
+    _instrument: {fileID: 1674946523628901456, guid: 9a2acfcd0efcb8a4cbe13ffad74e7665, type: 3}
+    _targetColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    _uvMask: {fileID: 0}
+  - _maxFill: 0.95
+    _instrument: {fileID: 1674946523628901456, guid: 7d8f8386b3c098f4196e40a3b60d3520, type: 3}
+    _targetColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    _uvMask: {fileID: 2800000, guid: aea881ad837a23d48b3667da31e8c238, type: 3}
+  - _maxFill: 0.95
+    _instrument: {fileID: 1674946523628901456, guid: 7d8f8386b3c098f4196e40a3b60d3520, type: 3}
+    _targetColor: {r: 0.1, g: 0.1, b: 0.1, a: 1}
+    _uvMask: {fileID: 2800000, guid: 9f083dbf8f783e64691cfd6d2c2fe56c, type: 3}

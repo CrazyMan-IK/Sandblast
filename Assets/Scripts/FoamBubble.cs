@@ -32,6 +32,17 @@ namespace Sandblast
             {
                 Destroy(gameObject);
             }
+
+            const float minDuration = 0.25f;
+            const float maxDuration = 0.5f;
+
+            var target = Random.Range(minDuration, maxDuration);
+            var divider = target / 2;
+
+            transform.DOScale(target, Random.Range(minDuration, maxDuration)).From(0.01f).OnUpdate(() =>
+            {
+                _collider.radius = divider / transform.localScale.x;
+            });
         }
 
         public bool TryDestroy()

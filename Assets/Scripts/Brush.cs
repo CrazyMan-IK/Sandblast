@@ -8,6 +8,7 @@ using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
 using Sandblast.Models;
 using DitzelGames.FastIK;
+using Sandblast.Extensions;
 
 namespace Sandblast
 {
@@ -27,6 +28,7 @@ namespace Sandblast
         [SerializeField] private Transform _paintPoint = null;
 
         public readonly List<BrushStage> _stages = new List<BrushStage>();
+        private readonly List<PaintingJar> _jars = new List<PaintingJar>();
 
         private Camera _camera;
 
@@ -41,7 +43,7 @@ namespace Sandblast
         private readonly Collider[] _lastColliders = new Collider[4];
 
         public Transform PaintPoint => _paintPoint;
-        public PaintingJar LastJar { get; private set; } = null;
+        public PaintingJar LastJar => _jars[_jars.Count - 1];
 
         private void Awake()
         {
@@ -143,17 +145,18 @@ namespace Sandblast
 
         public void Init()
         {
+            var step = 1.0f / (_stages.Count + 1);
+
             for (int i = 0; i < _stages.Count; i++)
             {
                 var stage = _stages[i];
 
-                var jar = Instantiate(_jarPrefab, transform.position + Vector3.down * 0.75f + ((_stages.Count / 2 - i) * 0.25f - 0.125f) * Vector3.left, _jarPrefab.transform.rotation, transform.parent);
+                //var jar = Instantiate(_jarPrefab, transform.position + Vector3.down * 0.75f + ((_stages.Count / 2 - i) * 0.25f - 0.125f) * Vector3.left, _jarPrefab.transform.rotation, transform.parent);
+                //var jar = Instantiate(_jarPrefab, transform.position + Vector3.down * 0.75f + ((_stages.Count / 2 - i) / (_stages.Count / 8.0f) - (_stages.Count / 16.0f)) * Vector3.left, _jarPrefab.transform.rotation, transform.parent);
+                var jar = Instantiate(_jarPrefab, transform.position + Vector3.down * 0.75f + (step * (_stages.Count / 2.0f - i - 0.5f)) * Vector3.left, _jarPrefab.transform.rotation, transform.parent);
                 jar.Init(stage);
 
-                if (i == _stages.Count - 1)
-                {
-                    LastJar = jar;
-                }
+                _jars.Add(jar);
             }
 
             StartCoroutine(AfterCustomInit());
@@ -185,10 +188,25 @@ namespace Sandblast
 
         protected override void AfterShow()
         {
+            _meshMaterial.SetTexture(_albedo.Id, _albedo.RuntimeTexture);
+
             _brushMaterial.SetColor("_Color", TargetColor);
             Color.RGBToHSV(TargetColor, out var H, out var S, out var V);
             V -= 0.3f;
             _brushMaterial.SetColor("_ColorDim", Color.HSVToRGB(H, S, V));
+
+            foreach (var jar in _jars)
+            {
+                jar.gameObject.SetActive(true);
+            }
+        }
+
+        protected override void AfterHide()
+        {
+            foreach (var jar in _jars)
+            {
+                jar.gameObject.SetActive(false);
+            }
         }
 
         public void FillWithColor(RenderTexture source, Shader shader)
@@ -218,7 +236,6 @@ namespace Sandblast
             //_filledColor.SetBaseTexture(_startTex);
             //_filledColor.SetTexture(_albedo.RuntimeTexture);
             //_filledColor.SetTargetColor(Color.white);
-            _meshMaterial.SetTexture(_albedo.Id, _albedo.RuntimeTexture);
 
             _albedo.SetActiveTexture(_camera);
             if (hasntTexture)

@@ -22,11 +22,11 @@ MonoBehaviour:
     _instrument: {fileID: 1674946523628901456, guid: ab5dc8991bb40934e916f265f76f06a5, type: 3}
     _targetColor: {r: 0.72, g: 0.76, b: 0.8, a: 1}
     _uvMask: {fileID: 0}
-  - _maxFill: 0.95
+  - _maxFill: 0.965
     _instrument: {fileID: 1925275808418412983, guid: cb9dc89371e6bfd4fb954d700798e2e1, type: 3}
     _targetColor: {r: 0.5, g: 0.25, b: 0, a: 1}
     _uvMask: {fileID: 0}
-  - _maxFill: 0.95
+  - _maxFill: 0.98
     _instrument: {fileID: 8236208002393598815, guid: 291eac01ec2b52241b637f0989559668, type: 3}
     _targetColor: {r: 0.5019608, g: 0.2509804, b: 0, a: 1}
     _uvMask: {fileID: 0}

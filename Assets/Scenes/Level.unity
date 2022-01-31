@@ -197,7 +197,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 256, y: 256}
+  m_SizeDelta: {x: 160, y: 160}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &31384243
 GameObject:
@@ -712,8 +712,6 @@ MonoBehaviour:
   _fullCompletedSprite: {fileID: 21300000, guid: 09c6ea1522e2d1b4dbe92b953f4e0def, type: 3}
   _progress: {fileID: 7764536912887086928}
   _movement: {fileID: 1097678278}
-  _currentInstrumentIcon: {fileID: 398346686}
-  _nextInstrumentIcon: {fileID: 1003247767}
   _animationOverlay: {fileID: 531656901}
   _animationIcon: {fileID: 29153778}
   _toggle: {fileID: 1133778472}
@@ -3627,6 +3625,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 22f38f4408e5f1340a337094fe1ef231, type: 2}
   - {fileID: 11400000, guid: 5e7be52e0ceda30459a842492261d487, type: 2}
   - {fileID: 11400000, guid: f30d24a75ed99a54ebd7999403ed4bd9, type: 2}
+  - {fileID: 11400000, guid: eeed18762f28b6043bba0eb544015527, type: 2}
+  - {fileID: 11400000, guid: bca8383682535ca4486e3e27050d0e56, type: 2}
+  - {fileID: 11400000, guid: 195fabf912048f5498aaa9385ce68b92, type: 2}
+  - {fileID: 11400000, guid: 9559d70698e91364aa724fbd67566882, type: 2}
+  - {fileID: 11400000, guid: 0a68971930ebc8a4cb1e211e78090d3c, type: 2}
+  - {fileID: 11400000, guid: f8b59675e4e3e18488566344bcb36f99, type: 2}
+  - {fileID: 11400000, guid: af192b0cc940bdb47944eb484928dcee, type: 2}
+  - {fileID: 11400000, guid: a5b2901ba3a511745bf2aab0a75e5e87, type: 2}
+  - {fileID: 11400000, guid: 1f8b0decdc8e4c64bb54e0c57168b958, type: 2}
+  - {fileID: 11400000, guid: aefcfa14c0f3a4642a972482b54b200d, type: 2}
+  - {fileID: 11400000, guid: 8310ba06e914e714e9bd57fa3c9bf14b, type: 2}
   _instrumentsParent: {fileID: 963194228}
   _targetMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}
   _target: {fileID: 631343568}
@@ -5031,6 +5040,7 @@ MonoBehaviour:
   _speedMultiplier: 10
   _firstStage: {fileID: 0}
   _stagesRoot: {fileID: 0}
+  _lastStage: {fileID: 0}
   _stagePrefab: {fileID: 0}
 --- !u!114 &1618841357
 MonoBehaviour:
@@ -5939,7 +5949,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -400, y: 1000}
-  m_SizeDelta: {x: 4320, y: 4492}
+  m_SizeDelta: {x: 17280, y: 17968}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1958954693
 MonoBehaviour:
@@ -6511,7 +6521,7 @@ GameObject:
   - component: {fileID: 7764536912645264061}
   - component: {fileID: 7764536912645264060}
   m_Layer: 5
-  m_Name: Stage
+  m_Name: FirstStage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -6556,7 +6566,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c6fdbf0c143956c489222ce220fd28ea, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 636b1b9920f4f984abe45ea97fbd69c5, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6718,6 +6728,7 @@ MonoBehaviour:
   _speedMultiplier: 10
   _firstStage: {fileID: 7764536912645264060}
   _stagesRoot: {fileID: 2131254963}
+  _lastStage: {fileID: 7764536914501401840}
   _stagePrefab: {fileID: 3854043376808776322, guid: c171a18408b802b40b1bbeea467a6263, type: 3}
 --- !u!1 &7764536913376803331
 GameObject:
@@ -6924,7 +6935,7 @@ GameObject:
   - component: {fileID: 7764536914501401841}
   - component: {fileID: 7764536914501401840}
   m_Layer: 5
-  m_Name: Stage
+  m_Name: LastStage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

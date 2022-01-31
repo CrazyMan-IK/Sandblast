@@ -13,7 +13,10 @@ namespace Sandblast.UI
         [SerializeField] private float _speedMultiplier = 5;
         [SerializeField] private Image _firstStage = null;
         [SerializeField] private RectTransform _stagesRoot = null;
+        [SerializeField] private Image _lastStage = null;
         [SerializeField] private Image _stagePrefab = null;
+
+        private readonly List<Image> _stages = new List<Image>();
 
         private Slider _slider = null;
         private float _targetValue = 0;
@@ -43,6 +46,8 @@ namespace Sandblast.UI
 
             _instrumentsCount = instruments.Count;
 
+            _stages.Add(_firstStage);
+
             for (int i = 0; i < instruments.Count; i++)
             {
                 var instrument = instruments[i];
@@ -55,7 +60,11 @@ namespace Sandblast.UI
 
                 var stage = Instantiate(_stagePrefab, _stagesRoot);
                 stage.sprite = instrument.Preview;
+
+                _stages.Add(stage);
             }
+
+            _stages.Add(_lastStage);
         }
 
         public void SetCurrentInstrument(int index)
@@ -78,6 +87,11 @@ namespace Sandblast.UI
         {
             _slider.value = value;
             SetValue(value);
+        }
+
+        public Image GetStage(int index)
+        {
+            return _stages[index];
         }
     }
 }

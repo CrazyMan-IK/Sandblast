@@ -61,8 +61,6 @@ namespace Sandblast
                 FilledColor.SetUVMask(_startTex);
             }
 
-            const float minDuration = 0.25f;
-            const float maxDuration = 0.5f;
             const float rotationThreshold = 5;
 
             _ray.origin = transform.position;
@@ -75,8 +73,10 @@ namespace Sandblast
                 {
                     point = _hits[0].point;
 
-                    var foamBubble = Instantiate(_foamBubblePrefab, point, Random.rotation, Target.transform.parent);
-                    foamBubble.DOScale(Random.Range(minDuration, maxDuration), Random.Range(minDuration, maxDuration)).From(0);
+                    //var foamBubble = Instantiate(_foamBubblePrefab, point, Random.rotation, Target.transform.parent);
+                    //foamBubble.DOScale(Random.Range(minDuration, maxDuration), Random.Range(minDuration, maxDuration)).From(0.01f);
+
+                    Instantiate(_foamBubblePrefab, point, Random.rotation, Target.transform.parent);
                 }
             }
 
@@ -169,6 +169,11 @@ namespace Sandblast
             Shader.SetGlobalVector("_Point", Vector4.one * 999);
         }
 
+        protected override void AfterShow()
+        {
+            _meshMaterial.SetTexture(_albedo.Id, _startTex2);
+        }
+
         protected override IEnumerator AfterInit()
         {
             _lookAt.SetSource(0, new ConstraintSource() { sourceTransform = Target.transform.parent, weight = 1 });
@@ -186,7 +191,6 @@ namespace Sandblast
             //_filledColor.SetTexture(_albedo.RuntimeTexture);
             //_filledColor.SetTargetColor(_targetColor);
             _startTex2 = new RenderTexture(_albedo.RuntimeTexture.descriptor);
-            _meshMaterial.SetTexture(_albedo.Id, _startTex2);
             BlitWithTexture(_startTex2, BaseTexture, _setupShader, UVMask);
 
             _albedo.SetActiveTexture(_camera);

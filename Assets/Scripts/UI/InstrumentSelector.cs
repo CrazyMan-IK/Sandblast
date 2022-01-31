@@ -17,8 +17,6 @@ namespace Sandblast.UI
         [SerializeField] private Sprite _fullCompletedSprite = null;
         [SerializeField] private ProgressBar _progress = null;
         [SerializeField] private OrbitalMovement _movement = null;
-        [SerializeField] private Image _currentInstrumentIcon = null;
-        [SerializeField] private Image _nextInstrumentIcon = null;
         [SerializeField] private Image _animationOverlay = null;
         [SerializeField] private Image _animationIcon = null;
         [SerializeField] private Button _toggle = null;
@@ -153,16 +151,6 @@ namespace Sandblast.UI
         {
             if (_currentIndex == -1 && _instruments != null)
             {
-                _currentInstrumentIcon.sprite = _instruments[0].Preview;
-                if (_instruments.Count > 1)
-                {
-                    _nextInstrumentIcon.sprite = _instruments[1].Preview;
-                }
-                else
-                {
-                    _nextInstrumentIcon.sprite = _fullCompletedSprite;
-                }
-
                 Select(0);
 
                 StartCoroutine(AsyncStart());
@@ -185,15 +173,6 @@ namespace Sandblast.UI
             InstrumentChanged?.Invoke(_completedCount);
 
             _progress.SetCurrentInstrument(_completedCount);
-
-            if (_completedCount + 1 < _instruments.Count)
-            {
-                _nextInstrumentIcon.sprite = _instruments[_completedCount + 1].Preview;
-            }
-            else
-            {
-                _nextInstrumentIcon.sprite = _fullCompletedSprite;
-            }
 
             RunIconAnimation(0.6f);
         }
@@ -225,40 +204,33 @@ namespace Sandblast.UI
         {
             var animation = DOTween.Sequence().OnComplete(() =>
             {
-                _nextInstrumentIcon.gameObject.SetActive(true);
                 _animationOverlay.gameObject.SetActive(false);
-                //Select(_completedCount);
-                _currentInstrumentIcon.sprite = _instruments[_completedCount].Preview;
             });
 
-            _animationIcon.sprite = _currentInstrumentIcon.sprite;
+            var prevStage = _progress.GetStage(_completedCount - 1);
+            var nextStage = _progress.GetStage(_completedCount);
+
+            _animationIcon.sprite = prevStage.sprite;
             _animationOverlay.gameObject.SetActive(true);
-            _nextInstrumentIcon.gameObject.SetActive(false);
-            _animationIcon.rectTransform.position = _nextInstrumentIcon.rectTransform.position;
+            _animationIcon.rectTransform.position = prevStage.rectTransform.position;
 
             animation.Append(_animationIcon.rectTransform.DOAnchorPos(Vector2.zero, delay).SetEase(Ease.InOutQuart));
-            animation.Join(_animationIcon.rectTransform.DOScale(3, delay));
+            animation.Join(_animationIcon.rectTransform.DOScale(4, delay));
             animation.Join(_animationOverlay.DOFade(0.5f, delay));
             animation.Join(_instruments[_completedCount - 1].transform.DOLocalMove(Vector3.down * 5, delay).SetRelative());
 
             animation.Append(_animationIcon.rectTransform.DORotate(Vector3.up * 180, delay / 2, RotateMode.LocalAxisAdd).SetEase(Ease.InCubic).OnComplete(() =>
             {
-                //_animationIcon.rectTransform.eulerAngles = Vector3.down * 90;
-                _animationIcon.sprite = _nextInstrumentIcon.sprite;
+                _animationIcon.sprite = nextStage.sprite;
                 _instruments[_completedCount].transform.position += Vector3.down * 5;
                 Select(_completedCount);
             }));
             animation.Append(_animationIcon.rectTransform.DORotate(Vector3.up * 180, delay / 2, RotateMode.LocalAxisAdd).SetEase(Ease.OutCubic));
 
-            animation.Append(_animationIcon.rectTransform.DOMove(_nextInstrumentIcon.rectTransform.position, delay).SetEase(Ease.InOutQuart));
+            animation.Append(_animationIcon.rectTransform.DOMove(nextStage.rectTransform.position, delay).SetEase(Ease.InOutQuart));
             animation.Join(_animationIcon.rectTransform.DOScale(1, delay));
             animation.Join(_animationOverlay.DOFade(0, delay));
             animation.Join(_instruments[_completedCount].transform.DOLocalMove(Vector3.up * 5, delay).SetRelative());
-
-            /*animation.OnComplete(() =>
-            {
-                InstrumentChanged?.Invoke(_completedCount);
-            });*/
         }
     }
 }

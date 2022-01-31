@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06f6510c13e083e49b5ac0d496c08f94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preview: {fileID: 21300000, guid: 734ae1d578da52b40b8854cca22ac177, type: 3}
+  _preview: {fileID: 21300000, guid: e45aac5ebf4e2da44a976228df2dd8a4, type: 3}
   _offset:
     serializedVersion: 2
     x: 0

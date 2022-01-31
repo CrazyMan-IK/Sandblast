@@ -94,6 +94,8 @@ namespace Sandblast
         public void Hide()
         {
             gameObject.SetActive(false);
+
+            AfterHide();
         }
 
         protected void Reinit(Color color, Texture uvMask)
@@ -108,6 +110,7 @@ namespace Sandblast
         protected virtual void AfterEnable() { }
         protected virtual void AfterDisable() { }
         protected virtual void AfterShow() { }
+        protected virtual void AfterHide() { }
         protected virtual IEnumerator AfterInit()
         {
             yield break;
