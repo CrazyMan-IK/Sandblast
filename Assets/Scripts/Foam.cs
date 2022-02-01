@@ -31,7 +31,7 @@ namespace Sandblast
         private bool _inited = false;
 
         private Ray _ray = new Ray();
-        private readonly RaycastHit[] _hits = new RaycastHit[1];
+        private readonly RaycastHit[] _hits = new RaycastHit[10];
 
         private void Awake()
         {
@@ -67,11 +67,14 @@ namespace Sandblast
             _ray.direction = Quaternion.Euler(Random.Range(-rotationThreshold, rotationThreshold), Random.Range(-rotationThreshold, rotationThreshold), 0) * transform.forward;
             var point = Vector4.one * 999;
 
-            if (Physics.RaycastNonAlloc(_ray, _hits) > 0)
+            var hitCount = Physics.RaycastNonAlloc(_ray, _hits);
+            if (hitCount > 0)
             {
-                if (_hits[0].collider.gameObject == Target.gameObject)
+                var hit = _hits.GetClosestHit(hitCount);
+
+                if (hit.collider.gameObject == Target.gameObject)
                 {
-                    point = _hits[0].point;
+                    point = hit.point;
 
                     //var foamBubble = Instantiate(_foamBubblePrefab, point, Random.rotation, Target.transform.parent);
                     //foamBubble.DOScale(Random.Range(minDuration, maxDuration), Random.Range(minDuration, maxDuration)).From(0.01f);

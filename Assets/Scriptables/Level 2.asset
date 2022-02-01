@@ -18,7 +18,7 @@ MonoBehaviour:
   _scale: {x: 10, y: 10, z: 10}
   _rotation: {x: 0, y: 0, z: 0}
   _instruments:
-  - _maxFill: 0.4
+  - _maxFill: 0.35
     _instrument: {fileID: 1674946523628901456, guid: a1be854fb05385149af5fb1cd4f1b059, type: 3}
     _targetColor: {r: 0.72156864, g: 0.7607844, b: 0.8000001, a: 1}
     _uvMask: {fileID: 0}

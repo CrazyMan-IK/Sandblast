@@ -1,4 +1,3 @@
-using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +21,7 @@ namespace Sandblast
         private int _destroyedBubbles = 0;
 
         private Ray _ray = new Ray();
-        private readonly RaycastHit[] _hits = new RaycastHit[1];
+        private readonly RaycastHit[] _hits = new RaycastHit[10];
 
         private void Update()
         {
@@ -47,9 +46,12 @@ namespace Sandblast
             _ray.origin = transform.position;
             _ray.direction = Quaternion.Euler(Random.Range(-rotationThreshold, rotationThreshold) * 2, Random.Range(-rotationThreshold, rotationThreshold), 0) * (coord - _camera.transform.position);
 
-            if (Physics.RaycastNonAlloc(_ray, _hits) > 0)
+            var hitCount = Physics.RaycastNonAlloc(_ray, _hits);
+            if (hitCount > 0)
             {
-                if (_hits[0].collider.TryGetComponent(out FoamBubble bubble))
+                var hit = _hits.GetClosestHit(hitCount);
+
+                if (hit.collider.TryGetComponent(out FoamBubble bubble))
                 {
                     if (bubble.TryDestroy())
                     {
