@@ -54,10 +54,13 @@
 					int n = 0;
 					average = float3(0.0, 0.0, 0.0);
 
-					//-1.5, -0.5, 0.5, 1.5
-					const float threshold = 3.0;
+					//      -1.5, -0.5, 0.5, 1.5
+					//-2.5, -1.5, -0.5, 0.5, 1.5, 2.5
+					const float threshold = 2.5;
 
+					[unroll]
 					for (float x = -threshold; x <= threshold; x++) {
+						[unroll]
 						for (float y = -threshold; y <= threshold; y++) {
 							float2 xy = float2(x, y);
 							float3 c = tex2D(_MainTex, i.uv + _MainTex_TexelSize.xy * xy);

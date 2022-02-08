@@ -17,6 +17,7 @@ namespace Sandblast
         [SerializeField] private Color _targetColor = Color.white;
         [SerializeField] private bool _useTargetColor = false;
         [SerializeField] private ProgressBar _progress = null;
+        [SerializeField] private ParticleSystem _particles = null;
         [SerializeField] private RawImage _output1 = null;
         [SerializeField] private RawImage _output2 = null;
         [SerializeField] private RawImage _output3 = null;
@@ -30,6 +31,7 @@ namespace Sandblast
         private float _maxFill = 0;
         private bool _isManual = false;
         private float _manualValue = 0;
+        private bool _particlesEnabled = false;
 
         //private Texture2D _textureBuffer = null;
 
@@ -55,11 +57,28 @@ namespace Sandblast
             {
                 //UnityEditorInternal.RenderDoc.BeginCaptureRenderDoc(UnityEditor.EditorWindow.focusedWindow);
 
-                _progress.SetValue(GetProgress());
+                var progress = GetProgress();
+
+                _progress.SetValue(progress);
+                if (_particlesEnabled)
+                {
+                    var emission = _particles.emission;
+                    emission.rateOverTime = progress.Remap(0, 1, 0, 4);
+                }
 
                 //UnityEditorInternal.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.focusedWindow);
                 yield return wait;
             }
+        }
+
+        public void EnableParticles()
+        {
+            _particlesEnabled = true;
+        }
+
+        public void DisableParticles()
+        {
+            _particlesEnabled = false;
         }
 
         public void EnableManualMode()

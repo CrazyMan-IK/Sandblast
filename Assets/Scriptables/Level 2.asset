@@ -14,13 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseTexture: {fileID: 2800000, guid: 9ff20da4de84a564b9034b26dd92c7c9, type: 3}
   _mesh: {fileID: -6099194999884498512, guid: 7977b36f881207d478086e426baf7770, type: 3}
-  _offset: {x: 0, y: 0, z: 0}
+  _offset: {x: 0, y: 0, z: 0.125}
   _scale: {x: 10, y: 10, z: 10}
   _rotation: {x: 0, y: 0, z: 0}
   _instruments:
   - _maxFill: 0.35
     _instrument: {fileID: 1674946523628901456, guid: a1be854fb05385149af5fb1cd4f1b059, type: 3}
-    _targetColor: {r: 0.72156864, g: 0.7607844, b: 0.8000001, a: 1}
+    _targetColor: {r: 0.72, g: 0.76, b: 0.8, a: 1}
     _uvMask: {fileID: 0}
   - _maxFill: 1
     _instrument: {fileID: 1674946523628901456, guid: 9a2acfcd0efcb8a4cbe13ffad74e7665, type: 3}

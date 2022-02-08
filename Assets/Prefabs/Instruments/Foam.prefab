@@ -603,7 +603,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
-    maxNumParticles: 500
+    maxNumParticles: 250
     size3D: 0
     rotation3D: 0
     gravityModifier:
@@ -663,7 +663,7 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 1
+    angle: 5
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
@@ -749,7 +749,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.2
+      value: 0.0001
       mode: 0
       spread: 0
       speed:
@@ -868,7 +868,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 500
+      scalar: 250
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4838,7 +4838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de78efd752115aa4a9722cbc199df2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preview: {fileID: 21300000, guid: 636b1b9920f4f984abe45ea97fbd69c5, type: 3}
+  _preview: {fileID: 21300000, guid: 9e727147ec277354ead1df68c328708d, type: 3}
   _offset:
     serializedVersion: 2
     x: 130
@@ -4877,8 +4877,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8839222507620952256}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -1.11, z: -1.2}
+  m_LocalRotation: {x: -0.49999997, y: -0, z: -0, w: 0.86602545}
+  m_LocalPosition: {x: 0, y: -0.89882326, z: -1.0731924}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1674946523628901460}
@@ -4891,7 +4891,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8839222507620952256}
-  m_Mesh: {fileID: 6683767129571065687, guid: 69745de0af8dfe640a05b89895a65f47, type: 3}
+  m_Mesh: {fileID: 6462747153820524415, guid: 6d2fe3aff9f40b34695cbc8410075c93, type: 3}
 --- !u!23 &7300149591999275593
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -4911,11 +4911,10 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 4bf2154883282b0459f33ce6b1614f8b, type: 2}
-  - {fileID: 2100000, guid: 50d602df55c20954f8f864070eab77e7, type: 2}
-  - {fileID: 2100000, guid: 96e3213df7b2e1047921a1d233de1909, type: 2}
-  - {fileID: 2100000, guid: e59bc2b77a54cb74bb56e029491489a2, type: 2}
-  - {fileID: 2100000, guid: 9919132c3aa7ee84bb0155dddd6cc719, type: 2}
+  - {fileID: 2100000, guid: d5fce0752d0d21b4da4c03e31345b383, type: 2}
+  - {fileID: 2100000, guid: c30e9b87342c64a4d9bcb70c2d1b470d, type: 2}
+  - {fileID: 2100000, guid: 956a16bc72aad0f4eaf932ffe3615173, type: 2}
+  - {fileID: 2100000, guid: cb14e8fc5f3230048abf4fcb25c463e6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

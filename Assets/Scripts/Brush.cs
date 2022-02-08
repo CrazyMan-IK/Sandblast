@@ -8,7 +8,6 @@ using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
 using Sandblast.Models;
 using DitzelGames.FastIK;
-using Sandblast.Extensions;
 
 namespace Sandblast
 {
@@ -16,7 +15,6 @@ namespace Sandblast
     {
         public event Action StageChanged = null;
 
-        [SerializeField] private FastIKFabric _ik = null;
         [SerializeField] private PaintingJar _jarPrefab = null;
         [SerializeField] private Material _brushMaterial = null;
         [SerializeField] private Material _meshMaterial = null;
@@ -39,19 +37,10 @@ namespace Sandblast
         private bool _inited = false;
         private Vector4 _point = Vector4.one * 999;
 
-        private Transform _targetPoint = null;
         private readonly Collider[] _lastColliders = new Collider[4];
 
         public Transform PaintPoint => _paintPoint;
         public PaintingJar LastJar => _jars[_jars.Count - 1];
-
-        private void Awake()
-        {
-            _targetPoint = new GameObject("Brush target").transform;
-            _targetPoint.parent = transform.parent;
-
-            _ik.Target = _targetPoint;
-        }
 
         private void Update()
         {
@@ -68,8 +57,6 @@ namespace Sandblast
             FilledColor.SetUVMask(_startTex);
             FilledColor.SetTargetColorUsage(false);
 
-            _targetPoint.position = Vector3.Lerp(_targetPoint.position, _paintPoint.position, 20 * Time.deltaTime);
-
             Shader.SetGlobalVector("_Point", _point);
             Shader.SetGlobalColor("_BrushColor", TargetColor);
             Shader.SetGlobalFloat("_BrushSize", 0.250f);
@@ -81,14 +68,6 @@ namespace Sandblast
                 InvokeCompletedEvent();
             }
         }
-
-        /*private void OnTriggerEnter(Collider collider)
-        {
-            if (collider.TryGetComponent<PaintingJar>(out var jar))
-            {
-                Reinit(jar.Stage.Color, jar.Stage.UVMask);
-            }
-        }*/
 
         public void OnBeginDrag(PointerEventData eventData)
         {

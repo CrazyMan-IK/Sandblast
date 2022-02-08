@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Animations;
 using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
+using DitzelGames.FastIK;
 
 namespace Sandblast
 {
@@ -55,6 +56,8 @@ namespace Sandblast
 
             if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {
+                FilledColor.DisableParticles();
+
                 StartCoroutine(_albedo.BlitWithTexture(_startTex, _setupShader, Color.white, UVMask, true));
                 InvokeCompletedEvent();
             }
@@ -109,6 +112,11 @@ namespace Sandblast
             _albedo.SetInactiveTexture(_camera);
 
             Shader.SetGlobalVector("_Point", Vector4.one * 999);
+        }
+
+        protected override void AfterShow()
+        {
+            FilledColor.EnableParticles();
         }
 
         protected override IEnumerator AfterInit()

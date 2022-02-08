@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8419950780687514339}
+  - component: {fileID: 4332833075451695747}
   m_Layer: 0
   m_Name: Bone.003
   m_TagString: Untagged
@@ -31,6 +32,28 @@ Transform:
   m_Father: {fileID: 1196679120166582833}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4332833075451695747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266754878127624544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a53ed88943638f468cb9a687e521305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  child: {fileID: 1736689215179298079}
+  boneAxis: {x: 0, y: 1, z: 0}
+  radius: 0.05
+  isUseEachBoneForceSettings: 0
+  stiffnessForce: 0.01
+  dragForce: 0.4
+  springForce: {x: 0, y: -0.0001, z: 0}
+  colliders: []
+  debug: 1
+  threshold: 0.01
 --- !u!1 &1570456263378200745
 GameObject:
   m_ObjectHideFlags: 0
@@ -40,6 +63,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2778887245507174484}
+  - component: {fileID: 6169032107475067239}
   m_Layer: 0
   m_Name: Bone.001
   m_TagString: Untagged
@@ -62,6 +86,28 @@ Transform:
   m_Father: {fileID: 2319178536150990742}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6169032107475067239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570456263378200745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a53ed88943638f468cb9a687e521305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  child: {fileID: 1196679120166582833}
+  boneAxis: {x: 0, y: 1, z: 0}
+  radius: 0.05
+  isUseEachBoneForceSettings: 0
+  stiffnessForce: 0.01
+  dragForce: 0.4
+  springForce: {x: 0, y: -0.0001, z: 0}
+  colliders: []
+  debug: 1
+  threshold: 0.01
 --- !u!1 &1674946523628901461
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,7 +166,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.25}
+  m_Size: {x: 0.1, y: 0.3}
   m_EdgeRadius: 0
 --- !u!114 &1674946523628901456
 MonoBehaviour:
@@ -141,7 +187,6 @@ MonoBehaviour:
     y: -65
     width: -320
     height: 140
-  _ik: {fileID: 6596763645394944050}
   _jarPrefab: {fileID: 329409767792724777, guid: 58390550683ad034684f519172a229f9, type: 3}
   _brushMaterial: {fileID: 2100000, guid: 78f90d200358b7b4b8a62f247b92e445, type: 2}
   _meshMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}
@@ -150,7 +195,7 @@ MonoBehaviour:
   _fillShader: {fileID: 4800000, guid: fbe2bd51cd5678d40927ba1f0d7e447b, type: 3}
   _fillColorShader: {fileID: 4800000, guid: a1a4b923d1af4a64aa2f86dbe135c84b, type: 3}
   _fixIlsandEdgesShader: {fileID: 4800000, guid: 2104f28424dbce449a5771208c392d79, type: 3}
-  _paintPoint: {fileID: 906752015304002470}
+  _paintPoint: {fileID: 8050556451627688521}
 --- !u!1 &1706715974568505209
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,6 +388,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1196679120166582833}
+  - component: {fileID: 649388270752256956}
   m_Layer: 0
   m_Name: Bone.002
   m_TagString: Untagged
@@ -365,6 +411,28 @@ Transform:
   m_Father: {fileID: 2778887245507174484}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &649388270752256956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5568980947639136027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a53ed88943638f468cb9a687e521305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  child: {fileID: 8419950780687514339}
+  boneAxis: {x: 0, y: 1, z: 0}
+  radius: 0.05
+  isUseEachBoneForceSettings: 0
+  stiffnessForce: 0.01
+  dragForce: 0.4
+  springForce: {x: 0, y: -0.0001, z: 0}
+  colliders: []
+  debug: 1
+  threshold: 0.01
 --- !u!1 &6328794879046907314
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +442,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6674253033307025160}
+  - component: {fileID: 4214115089629198430}
   m_Layer: 0
   m_Name: Model
   m_TagString: Untagged
@@ -397,6 +466,74 @@ Transform:
   m_Father: {fileID: 1674946523628901460}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 90, y: -90, z: 0}
+--- !u!114 &4214115089629198430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6328794879046907314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f7d0df1d7dfa3541840b2e90022aac5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dynamicRatio: 0.25
+  stiffnessForce: 0.01
+  stiffnessCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  dragForce: 1
+  dragCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  springBones:
+  - {fileID: 6169032107475067239}
+  - {fileID: 649388270752256956}
+  - {fileID: 4332833075451695747}
+  - {fileID: 6699014861854729495}
 --- !u!1 &7079783618508554286
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,7 +543,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8050556451627688521}
-  - component: {fileID: 6596763645394944050}
   m_Layer: 0
   m_Name: Bone.005
   m_TagString: Untagged
@@ -428,24 +564,6 @@ Transform:
   m_Father: {fileID: 1736689215179298079}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6596763645394944050
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7079783618508554286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03ca45bb53dc94f478358a1b6475653d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ChainLength: 4
-  Target: {fileID: 0}
-  Pole: {fileID: 0}
-  Iterations: 10
-  Delta: 0.001
-  SnapBackStrength: 0
 --- !u!1 &7843764147985765369
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +573,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1736689215179298079}
+  - component: {fileID: 6699014861854729495}
   m_Layer: 0
   m_Name: Bone.004
   m_TagString: Untagged
@@ -477,3 +596,25 @@ Transform:
   m_Father: {fileID: 8419950780687514339}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6699014861854729495
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7843764147985765369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a53ed88943638f468cb9a687e521305, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  child: {fileID: 8050556451627688521}
+  boneAxis: {x: 0, y: 1, z: 0}
+  radius: 0.05
+  isUseEachBoneForceSettings: 0
+  stiffnessForce: 0.01
+  dragForce: 0.4
+  springForce: {x: 0, y: -0.0001, z: 0}
+  colliders: []
+  debug: 1
+  threshold: 0.01

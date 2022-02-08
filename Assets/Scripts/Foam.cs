@@ -93,7 +93,8 @@ namespace Sandblast
             if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {
                 StartCoroutine(_albedo.BlitWithTexture(_startTex, _setupShader, Color.white, UVMask, true));
-                BlitWithTexture(_startTex2, _startTex, _setupShader, UVMask);
+                //BlitWithTexture(_startTex2, _startTex, _setupShader, UVMask);
+                _meshMaterial.SetTexture(_albedo.Id, _albedo.RuntimeTexture);
                 InvokeCompletedEvent();
             }
         }

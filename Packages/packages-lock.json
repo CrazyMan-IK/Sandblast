@@ -20,6 +20,13 @@
       "source": "builtin",
       "dependencies": {}
     },
+    "com.unity.build-report-inspector": {
+      "version": "0.2.2-preview",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
     "com.unity.collab-proxy": {
       "version": "1.13.5",
       "depth": 0,
