@@ -1,3 +1,4 @@
+using Sandblast.Extensions;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.Rendering;
 namespace Sandblast
 {
     [RequireComponent(typeof(ParticleSystem))]
-    [RequireComponent(typeof(LookAtConstraint))]
+    //[RequireComponent(typeof(LookAtConstraint))]
     public class SandBlaster : Instrument
     {
         [SerializeField] private Material _meshMaterial;
@@ -19,7 +20,7 @@ namespace Sandblast
 
         private Camera _camera;
         private ParticleSystem _particleSystem;
-        private LookAtConstraint _lookAt;
+        //private LookAtConstraint _lookAt;
 
         private RenderTexture _startTex;
         private CommandBuffer _startTexBuffer;
@@ -33,7 +34,7 @@ namespace Sandblast
         private void Awake()
         {
             _particleSystem = GetComponent<ParticleSystem>();
-            _lookAt = GetComponent<LookAtConstraint>();
+            //_lookAt = GetComponent<LookAtConstraint>();
         }
 
         private void Update()
@@ -58,9 +59,15 @@ namespace Sandblast
                 FilledColor.SetUVMask(_startTex);
             }
 
+            if (InputPanel.IsTouching)
+            {
+                var coord = _camera.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 5f);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(coord - transform.position - transform.up - transform.forward), 10 * Time.deltaTime);
+            }
+
             const float rotationThreshold = 1.25f;
 
-            _ray.origin = transform.position;
+            _ray.origin = transform.position + transform.up + transform.forward;
             _ray.direction = Quaternion.Euler(Random.Range(-rotationThreshold, rotationThreshold), Random.Range(-rotationThreshold, rotationThreshold), 0) * transform.forward;
             var point = Vector4.one * 999;
 
@@ -88,7 +95,7 @@ namespace Sandblast
 
         public override bool IsNeedDisablingRotation()
         {
-            return false;
+            return true;
         }
 
         public override bool IsAlwaysActive()
@@ -127,7 +134,7 @@ namespace Sandblast
 
         protected override IEnumerator AfterInit()
         {
-            _lookAt.SetSource(0, new ConstraintSource() { sourceTransform = Target.transform.parent, weight = 1 });
+            //_lookAt.SetSource(0, new ConstraintSource() { sourceTransform = Target.transform.parent, weight = 1 });
 
             _camera = Camera.main;
             _albedo = new PaintableTexture(Color.white, BaseTexture.width, BaseTexture.height, Constants.Albedo, _uvShader, Target.mesh, _fixIlsandEdgesShader, MarkedIslands);

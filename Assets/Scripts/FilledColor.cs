@@ -60,11 +60,11 @@ namespace Sandblast
                 var progress = GetProgress();
 
                 _progress.SetValue(progress);
-                /*if (_particlesEnabled)
+                if (_particlesEnabled)
                 {
                     var emission = _particles.emission;
-                    emission.rateOverTime = 2.5f; //progress.Remap(0, 1, 0, 4);
-                }*/
+                    emission.rateOverTime = progress.Remap(0, 1, 0, 4);
+                }
 
                 //UnityEditorInternal.RenderDoc.EndCaptureRenderDoc(UnityEditor.EditorWindow.focusedWindow);
                 yield return wait;

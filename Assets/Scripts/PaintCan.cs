@@ -60,8 +60,6 @@ namespace Sandblast
                 FilledColor.SetUVMask(_startTex);
             }
 
-            const float rotationThreshold = 5f;
-
             if (InputPanel.IsTouching)
             {
                 var coord = _camera.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 1.45f);
@@ -73,8 +71,10 @@ namespace Sandblast
                 transform.position = Vector3.Slerp(transform.position, newPosition, 10 * Time.deltaTime);
 
                 coord = _camera.ScreenToWorldPoint(Input.mousePosition + Vector3.forward * 5f);
-                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(coord - _camera.transform.position), 10 * Time.deltaTime);
+                transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(coord - transform.position), 10 * Time.deltaTime);
             }
+
+            const float rotationThreshold = 5f;
 
             _ray.origin = transform.position;
             _ray.direction = Quaternion.Euler(Random.Range(-rotationThreshold, rotationThreshold), Random.Range(-rotationThreshold, rotationThreshold), 0) * transform.forward;
