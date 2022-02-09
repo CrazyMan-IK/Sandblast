@@ -613,7 +613,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8236208002393598811}
-  - component: {fileID: 8236208002393598814}
   - component: {fileID: 8980698718572867536}
   - component: {fileID: 8236208002393598815}
   m_Layer: 6
@@ -640,25 +639,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -19.992, y: -79.82, z: 0}
---- !u!1183024399 &8236208002393598814
-LookAtConstraint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8236208002393598812}
-  m_Enabled: 0
-  m_Weight: 1
-  m_RotationAtRest: {x: 0, y: 0, z: 0}
-  m_RotationOffset: {x: 0, y: 0, z: 0}
-  m_Roll: 0
-  m_WorldUpObject: {fileID: 0}
-  m_UseUpObject: 0
-  m_IsContraintActive: 1
-  m_IsLocked: 1
-  m_Sources:
-  - sourceTransform: {fileID: 0}
-    weight: 1
 --- !u!61 &8980698718572867536
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -704,6 +684,7 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _sphereMesh: {fileID: 4711208715938537054, guid: d70b0f1cac4c087439c75e6320cf0ba6, type: 3}
   _meshMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}
   _uvShader: {fileID: 4800000, guid: e67701c9ec1d41c4f9381462d9516c54, type: 3}
   _setupShader: {fileID: 4800000, guid: dfbd3ff51c7074e4babe5bf2e89447dc, type: 3}

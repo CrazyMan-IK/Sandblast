@@ -5,17 +5,25 @@ using UnityEngine.Animations;
 using UnityEngine.Rendering;
 using UnityEngine.EventSystems;
 using DitzelGames.FastIK;
+using System.Linq;
+using Sandblast.Extensions;
 
 namespace Sandblast
 {
     public class Polish : Instrument, IDragHandler, IInitializePotentialDragHandler
     {
+        [SerializeField] private Mesh _sphereMesh;
         [SerializeField] private Material _meshMaterial;
         [SerializeField] private Shader _uvShader;
         [SerializeField] private Shader _setupShader;
         [SerializeField] private Shader _fillShader;
         [SerializeField] private Shader _fillColorShader;
         [SerializeField] private Shader _fixIlsandEdgesShader;
+
+        private Mesh _spawnMesh;
+        private Vector3[] _vertices;
+        private ILookup<Vector3, int> _triangles;
+        private HashSet<int> _activeVertices = new HashSet<int>();
 
         private Camera _camera;
 
@@ -79,6 +87,44 @@ namespace Sandblast
                 if (_hits[0].collider.gameObject == Target.gameObject)
                 {
                     point = _hits[0].point;
+
+                    var rotation = Quaternion.Inverse(Target.transform.rotation);
+                    var scale = VectorExtensions.Divide(Vector3.one, Target.transform.localScale);
+
+                    var minDist = float.MaxValue;
+                    var minVertIndex = -1;
+                    for (int i = 0; i < _sphereMesh.vertexCount; i++)
+                    {
+                        //Debug.DrawRay(_sphereMesh.vertices[i], _sphereMesh.normals[i] * 0.1f, Color.red, 10000);
+                        //Debug.DrawRay(point, _hits[0].normal * 0.1f, Color.green, 10000);
+                        //Debug.DrawRay(Target.transform.InverseTransformPoint(point), _hits[0].normal * 0.1f, Color.blue, 10000);
+
+                        //var curDist = Vector3.Distance(_sphereMesh.vertices[i], Target.transform.InverseTransformPoint(point));
+                        var curDist = Vector3.Distance(_sphereMesh.vertices[i], rotation * Vector3.Scale(point, scale));
+                        if (curDist < minDist)
+                        {
+                            minVertIndex = i;
+                            minDist = curDist;
+                        }
+                    }
+
+                    if (_activeVertices.Add(minVertIndex))
+                    {
+                        //_vertices[_activeVertices.Count - 1] = _sphereMesh.vertices[minVertIndex];
+                        //_spawnMesh.SetVertices(_vertices, 0, _activeVertices.Count);
+
+                        foreach (var x in _triangles[_sphereMesh.vertices[minVertIndex]])
+                        {
+                            _vertices[x] = _sphereMesh.vertices[minVertIndex];
+                            //_spawnMesh.vertices[x] = _sphereMesh.vertices[minVertIndex];
+                        }
+                        //_vertices[minVertIndex] = _sphereMesh.vertices[minVertIndex];
+
+                        _spawnMesh.vertices = _vertices;
+                        _spawnMesh.triangles = _sphereMesh.triangles;
+                        //_spawnMesh.MarkModified();
+                        //_spawnMesh.SetVertices(_vertices);
+                    }
                 }
             }
 
@@ -121,6 +167,25 @@ namespace Sandblast
 
         protected override IEnumerator AfterInit()
         {
+            _vertices = new Vector3[_sphereMesh.vertexCount];
+
+            //var nonDuplicates = Enumerable.Range(0, _sphereMesh.triangles.Length).GroupBy(x => _sphereMesh.vertices[_sphereMesh.triangles[x]], x => x);
+            //vert, vertInd
+            _triangles = Enumerable.Range(0, _sphereMesh.triangles.Length).ToLookup(x => _sphereMesh.vertices[_sphereMesh.triangles[x]], x => _sphereMesh.triangles[x]);
+
+            _spawnMesh = new Mesh();
+            _spawnMesh.MarkDynamic();
+            _spawnMesh.vertices = _vertices;
+            _spawnMesh.triangles = _sphereMesh.triangles;
+            //_spawnMesh.SetVertices(_vertices);
+
+            var shape = PolishParticles.shape;
+            shape.mesh = _spawnMesh;
+            shape.meshShapeType = ParticleSystemMeshShapeType.Triangle;
+            shape.shapeType = ParticleSystemShapeType.Mesh;
+            shape.position = Target.mesh.bounds.center;
+            shape.scale = GetScaleFromTo(_sphereMesh.bounds.size, Vector3.Scale(Target.mesh.bounds.size, Target.transform.localScale));
+
             _camera = Camera.main;
             _albedo = new PaintableTexture(Color.white - Color.black, BaseTexture.width, BaseTexture.height, Constants.Specular, _uvShader, Target.mesh, _fixIlsandEdgesShader, MarkedIslands);
 
@@ -159,6 +224,15 @@ namespace Sandblast
             mat.color = Color.white - Color.white;
 
             Graphics.Blit(source, source, mat);
+        }
+
+        private Vector3 GetScaleFromTo(Vector3 from, Vector3 to)
+        {
+            var x = 1 / (from.x / to.x);
+            var y = 1 / (from.y / to.y);
+            var z = 1 / (from.z / to.z);
+
+            return new Vector3(x, y, z);
         }
 
         private IEnumerator SetupDestinationTextureBuffer()

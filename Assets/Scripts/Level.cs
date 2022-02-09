@@ -40,6 +40,7 @@ namespace Sandblast
         [SerializeField] private FilledColor _filledColor = null;
         [SerializeField] private PaintablesHolder _paintablesHolder = null;
         [SerializeField] private MarkingIslandsTexture _markingIslands = null;
+        [SerializeField] private ParticleSystem _polishParticles = null;
         [SerializeField] private InstrumentSelector _selector = null;
 
         [Space]
@@ -115,7 +116,7 @@ namespace Sandblast
                     if (lastBrush == null)
                     {
                         var instrument = Instantiate(instrumentInfo.Instrument, _instrumentsParent);
-                        instrument.Init(i == 0, _input, _level.BaseTexture, uvMask, _markingIslands, _target, _filledColor, _paintablesHolder, instrumentInfo.TargetColor, instrumentInfo.MaxFill);
+                        instrument.Init(i == 0, _input, _level.BaseTexture, uvMask, _markingIslands, _polishParticles, _target, _filledColor, _paintablesHolder, instrumentInfo.TargetColor, instrumentInfo.MaxFill);
 
                         if (!_tutorials.ContainsKey(i) || _tutorials[i] == null)
                         {
@@ -135,7 +136,7 @@ namespace Sandblast
                     }
 
                     var instrument = Instantiate(instrumentInfo.Instrument, _instrumentsParent);
-                    instrument.Init(i == 0, _input, _level.BaseTexture, uvMask, _markingIslands, _target, _filledColor, _paintablesHolder, instrumentInfo.TargetColor, instrumentInfo.MaxFill);
+                    instrument.Init(i == 0, _input, _level.BaseTexture, uvMask, _markingIslands, _polishParticles, _target, _filledColor, _paintablesHolder, instrumentInfo.TargetColor, instrumentInfo.MaxFill);
 
                     if (!_tutorials.ContainsKey(i) || _tutorials[i] == null)
                     {

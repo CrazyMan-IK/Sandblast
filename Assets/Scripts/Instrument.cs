@@ -20,6 +20,7 @@ namespace Sandblast
         private Texture _baseTexture = null;
         private Texture _uvMask = null;
         private MarkingIslandsTexture _markingIslands = null;
+        private ParticleSystem _polishParticles = null;
         private MeshFilter _target = null;
         private FilledColor _filledColor = null;
         private PaintablesHolder _paintablesHolder = null;
@@ -35,6 +36,7 @@ namespace Sandblast
         protected Texture BaseTexture => _baseTexture;
         protected Texture UVMask => _uvMask;
         protected Texture MarkedIslands => _markingIslands.Result;
+        protected ParticleSystem PolishParticles => _polishParticles;
         protected MeshFilter Target => _target;
         protected FilledColor FilledColor => _filledColor;
         protected PaintablesHolder PaintablesHolder => _paintablesHolder;
@@ -50,13 +52,14 @@ namespace Sandblast
             Completed?.Invoke();
         }
 
-        public void Init(bool isFirstInstrument, InputPanel input, Texture baseTexture, Texture uvMask, MarkingIslandsTexture markingIslands, MeshFilter target, FilledColor filledColor, PaintablesHolder paintablesHolder, Color targetColor, float maxFill)
+        public void Init(bool isFirstInstrument, InputPanel input, Texture baseTexture, Texture uvMask, MarkingIslandsTexture markingIslands, ParticleSystem polishParticles, MeshFilter target, FilledColor filledColor, PaintablesHolder paintablesHolder, Color targetColor, float maxFill)
         {
             _isFirstInstrument = isFirstInstrument;
             _input = input;
             _baseTexture = baseTexture;
             _uvMask = uvMask;
             _markingIslands = markingIslands;
+            _polishParticles = polishParticles;
             _target = target;
             _filledColor = filledColor;
             _paintablesHolder = paintablesHolder;

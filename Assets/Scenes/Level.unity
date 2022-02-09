@@ -2552,18 +2552,6 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
@@ -2577,23 +2565,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 417248, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
@@ -2617,7 +2605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 19848150, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: EmissionModule.rateOverTime.scalar
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 19848150, guid: 00dac97cdd613fe49a4eb911783ae686, type: 3}
       propertyPath: InitialModule.startLifetime.scalar
@@ -3944,6 +3932,7 @@ MonoBehaviour:
   _filledColor: {fileID: 1135145188}
   _paintablesHolder: {fileID: 1135145192}
   _markingIslands: {fileID: 1135145190}
+  _polishParticles: {fileID: 1152754577}
   _selector: {fileID: 192957820}
   _toggleButton: {fileID: 1133778472}
   _tutorialPreview: {fileID: 1658755503}
