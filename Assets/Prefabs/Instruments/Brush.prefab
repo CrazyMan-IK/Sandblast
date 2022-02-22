@@ -187,6 +187,8 @@ MonoBehaviour:
     y: -65
     width: -320
     height: 140
+  _paintSize: 0.5
+  _paintHardness: 0.75
   _jarPrefab: {fileID: 329409767792724777, guid: 58390550683ad034684f519172a229f9, type: 3}
   _brushMaterial: {fileID: 2100000, guid: 78f90d200358b7b4b8a62f247b92e445, type: 2}
   _meshMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}

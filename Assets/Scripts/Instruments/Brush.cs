@@ -58,9 +58,6 @@ namespace Sandblast
             FilledColor.SetTargetColorUsage(false);
 
             Shader.SetGlobalVector("_Point", _point);
-            Shader.SetGlobalColor("_BrushColor", TargetColor);
-            Shader.SetGlobalFloat("_BrushSize", 0.250f);
-            Shader.SetGlobalFloat("_BrushHardness", 0.75f);
 
             if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {
@@ -109,6 +106,8 @@ namespace Sandblast
 
         public void OnEndDrag(PointerEventData eventData)
         {
+            _point = Vector4.one * 999;
+
             _point.w = 0;
         }
 

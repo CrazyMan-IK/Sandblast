@@ -16,17 +16,17 @@ MonoBehaviour:
   _mesh: {fileID: 8768267998532605227, guid: 7bdaeeec1b404904298dc0f73c07df0f, type: 3}
   _offset: {x: -1, y: 0, z: 0}
   _scale: {x: 5, y: 5, z: 5}
-  _rotation: {x: 0, y: 0, z: 0}
+  _rotation: {x: 0, y: 0, z: 90}
   _instruments:
-  - _maxFill: 0.95
+  - _maxFill: 0.9
     _instrument: {fileID: 1674946523628901456, guid: ab5dc8991bb40934e916f265f76f06a5, type: 3}
     _targetColor: {r: 0.3764706, g: 0.4392157, b: 0.5019608, a: 1}
     _uvMask: {fileID: 0}
-  - _maxFill: 0.95
+  - _maxFill: 0.9
     _instrument: {fileID: 1925275808418412983, guid: cb9dc89371e6bfd4fb954d700798e2e1, type: 3}
     _targetColor: {r: 0.5, g: 0.3, b: 0.099999994, a: 1}
     _uvMask: {fileID: 2800000, guid: cb344ba5b1eca5842b93688e4876a0be, type: 3}
-  - _maxFill: 0.95
+  - _maxFill: 0.9
     _instrument: {fileID: 8236208002393598815, guid: 291eac01ec2b52241b637f0989559668, type: 3}
     _targetColor: {r: 0.3764706, g: 0.4392157, b: 0.5019608, a: 1}
     _uvMask: {fileID: 0}

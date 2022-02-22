@@ -10,7 +10,7 @@ using Sandblast.Extensions;
 
 namespace Sandblast
 {
-    public class Polish : Instrument, IDragHandler, IInitializePotentialDragHandler
+    public class Polish : Instrument, IDragHandler, IEndDragHandler, IInitializePotentialDragHandler
     {
         [SerializeField] private Mesh _sphereMesh;
         [SerializeField] private Material _meshMaterial;
@@ -58,10 +58,6 @@ namespace Sandblast
                 FilledColor.SetUVMask(_startTex);
             }
 
-            Shader.SetGlobalColor("_BrushColor", Color.white);
-            Shader.SetGlobalFloat("_BrushSize", 0.175f);
-            Shader.SetGlobalFloat("_BrushHardness", 0.75f);
-
             if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {
                 FilledColor.DisableParticles();
@@ -95,11 +91,6 @@ namespace Sandblast
                     var minVertIndex = -1;
                     for (int i = 0; i < _sphereMesh.vertexCount; i++)
                     {
-                        //Debug.DrawRay(_sphereMesh.vertices[i], _sphereMesh.normals[i] * 0.1f, Color.red, 10000);
-                        //Debug.DrawRay(point, _hits[0].normal * 0.1f, Color.green, 10000);
-                        //Debug.DrawRay(Target.transform.InverseTransformPoint(point), _hits[0].normal * 0.1f, Color.blue, 10000);
-
-                        //var curDist = Vector3.Distance(_sphereMesh.vertices[i], Target.transform.InverseTransformPoint(point));
                         var curDist = Vector3.Distance(_sphereMesh.vertices[i], rotation * Vector3.Scale(point, scale));
                         if (curDist < minDist)
                         {
@@ -110,20 +101,13 @@ namespace Sandblast
 
                     if (_activeVertices.Add(minVertIndex))
                     {
-                        //_vertices[_activeVertices.Count - 1] = _sphereMesh.vertices[minVertIndex];
-                        //_spawnMesh.SetVertices(_vertices, 0, _activeVertices.Count);
-
                         foreach (var x in _triangles[_sphereMesh.vertices[minVertIndex]])
                         {
                             _vertices[x] = _sphereMesh.vertices[minVertIndex];
-                            //_spawnMesh.vertices[x] = _sphereMesh.vertices[minVertIndex];
                         }
-                        //_vertices[minVertIndex] = _sphereMesh.vertices[minVertIndex];
 
                         _spawnMesh.vertices = _vertices;
                         _spawnMesh.triangles = _sphereMesh.triangles;
-                        //_spawnMesh.MarkModified();
-                        //_spawnMesh.SetVertices(_vertices);
                     }
                 }
             }
@@ -131,6 +115,11 @@ namespace Sandblast
             point.w = 1;
 
             Shader.SetGlobalVector("_Point", point);
+        }
+
+        public void OnEndDrag(PointerEventData eventData)
+        {
+            Shader.SetGlobalVector("_Point", Vector4.one * 999);
         }
 
         public void OnInitializePotentialDrag(PointerEventData eventData)
@@ -163,6 +152,8 @@ namespace Sandblast
         protected override void AfterShow()
         {
             FilledColor.EnableParticles();
+
+            Shader.SetGlobalColor("_BrushColor", Color.white);
         }
 
         protected override IEnumerator AfterInit()

@@ -18,23 +18,23 @@ MonoBehaviour:
   _scale: {x: 1, y: 1, z: 1}
   _rotation: {x: -90, y: 0, z: 0}
   _instruments:
-  - _maxFill: 0.65
+  - _maxFill: 0.8
     _instrument: {fileID: 1674946523628901456, guid: a1be854fb05385149af5fb1cd4f1b059, type: 3}
-    _targetColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    _targetColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     _uvMask: {fileID: 0}
   - _maxFill: 1
     _instrument: {fileID: 1674946523628901456, guid: 9a2acfcd0efcb8a4cbe13ffad74e7665, type: 3}
-    _targetColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
+    _targetColor: {r: 0.6, g: 0.6, b: 0.6, a: 1}
     _uvMask: {fileID: 0}
-  - _maxFill: 0.65
+  - _maxFill: 0.6
     _instrument: {fileID: 1674946523628901456, guid: 7d8f8386b3c098f4196e40a3b60d3520, type: 3}
     _targetColor: {r: 0.8, g: 0.8, b: 0.16, a: 1}
     _uvMask: {fileID: 2800000, guid: 0794983af72de9243beea0152e7465ff, type: 3}
-  - _maxFill: 0.65
+  - _maxFill: 0.6
     _instrument: {fileID: 1674946523628901456, guid: 7d8f8386b3c098f4196e40a3b60d3520, type: 3}
     _targetColor: {r: 0.6, g: 0.4, b: 0.8, a: 1}
     _uvMask: {fileID: 2800000, guid: 3373a8b707e3d8743966636b296fba5c, type: 3}
-  - _maxFill: 0.65
+  - _maxFill: 0.6
     _instrument: {fileID: 1674946523628901456, guid: 7d8f8386b3c098f4196e40a3b60d3520, type: 3}
     _targetColor: {r: 0.075, g: 0.15, b: 0.075, a: 1}
     _uvMask: {fileID: 2800000, guid: 0def1659d26f5414ebb755022879e9dc, type: 3}

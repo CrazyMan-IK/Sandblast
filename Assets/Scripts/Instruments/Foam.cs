@@ -92,9 +92,6 @@ namespace Sandblast
             point.w = 1;
 
             Shader.SetGlobalVector("_Point", point);
-            Shader.SetGlobalColor("_BrushColor", TargetColor);
-            Shader.SetGlobalFloat("_BrushSize", 0.175f);
-            Shader.SetGlobalFloat("_BrushHardness", 0.75f);
 
             if (Input.GetMouseButtonUp(0) && FilledColor.IsFilled() && !IsCompleted)
             {

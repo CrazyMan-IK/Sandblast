@@ -98,6 +98,8 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _paintSize: 0.5
+  _paintHardness: 0.75
 --- !u!1 &4584919577532452003
 GameObject:
   m_ObjectHideFlags: 0

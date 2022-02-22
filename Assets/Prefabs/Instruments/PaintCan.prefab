@@ -4863,6 +4863,8 @@ MonoBehaviour:
     y: -20
     width: -100
     height: -200
+  _paintSize: 0.4
+  _paintHardness: 0.75
   _brushMaterial: {fileID: 2100000, guid: cd6e7f360ea35054f91cd91e17cf88b0, type: 2}
   _meshMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}
   _uvShader: {fileID: 4800000, guid: e67701c9ec1d41c4f9381462d9516c54, type: 3}

@@ -18,11 +18,11 @@ MonoBehaviour:
   _scale: {x: 0.8, y: 0.8, z: 0.8}
   _rotation: {x: 0, y: 0, z: 0}
   _instruments:
-  - _maxFill: 0.98
+  - _maxFill: 0.9
     _instrument: {fileID: 1674946523628901456, guid: ab5dc8991bb40934e916f265f76f06a5, type: 3}
     _targetColor: {r: 0.7490196, g: 0.624183, b: 0.3745098, a: 1}
     _uvMask: {fileID: 0}
-  - _maxFill: 0.98
+  - _maxFill: 0.9
     _instrument: {fileID: 1925275808418412983, guid: cb9dc89371e6bfd4fb954d700798e2e1, type: 3}
     _targetColor: {r: 1, g: 0.6666667, b: 0, a: 1}
     _uvMask: {fileID: 0}

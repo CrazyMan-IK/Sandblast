@@ -684,6 +684,8 @@ MonoBehaviour:
     y: 0
     width: 0
     height: 0
+  _paintSize: 0.35
+  _paintHardness: 0.75
   _sphereMesh: {fileID: 4711208715938537054, guid: d70b0f1cac4c087439c75e6320cf0ba6, type: 3}
   _meshMaterial: {fileID: 2100000, guid: acc076d73b950ec459a26534197b8f95, type: 2}
   _uvShader: {fileID: 4800000, guid: e67701c9ec1d41c4f9381462d9516c54, type: 3}

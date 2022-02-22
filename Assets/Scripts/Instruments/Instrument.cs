@@ -11,6 +11,8 @@ namespace Sandblast
 
         [SerializeField] private Sprite _preview = null;
         [SerializeField] private Rect _offset = Rect.zero;
+        [SerializeField] private float _paintSize = 0.250f;
+        [SerializeField] private float _paintHardness = 0.75f;
 
         private bool _isCompleted = false;
 
@@ -91,6 +93,10 @@ namespace Sandblast
         {
             gameObject.SetActive(true);
 
+            Shader.SetGlobalColor("_BrushColor", TargetColor);
+            Shader.SetGlobalFloat("_BrushSize", _paintSize);
+            Shader.SetGlobalFloat("_BrushHardness", _paintHardness);
+
             AfterShow();
         }
 
@@ -105,6 +111,8 @@ namespace Sandblast
         {
             _targetColor = color;
             _uvMask = uvMask;
+
+            Shader.SetGlobalColor("_BrushColor", TargetColor);
         }
 
         public abstract bool IsNeedDisablingRotation();
